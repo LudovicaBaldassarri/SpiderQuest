@@ -1,0 +1,13 @@
+<resources>
+    <string name="gioca">Play</string>
+    <string name="istruzioni">Instructions</string>
+    <string name="menu">Menu</string>
+    <string name="istruzioni1">On the display at the centre of the web there are
+    three spiders, ready to hide along the branches of the web.</string>
+     <string name="istruzioni2">Pay attention to the leds which light up:
+        they will show the path of their same color spider.</string>
+    <string name="istruzioni3">When the leds turn off, it means that the spiders hid into
+        one of the hubs. Drag the spider on the right hub, in order to collect points.</string>
+    <string name="istruzioni4">If you guess right where the spiders are hiding, the game goes on,
+    but be careful: as it goes on, the spiders are going to move faster along the web.</string>
+</resources>
