@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -39,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openInstruction(View view) {
         Intent intent = new Intent(this, Instruction1Activity.class);
+        startActivity(intent);
+    }
+
+    public void openInizio(View view){
+        Intent intent=new Intent(this, Inizio.class);
         startActivity(intent);
     }
 
