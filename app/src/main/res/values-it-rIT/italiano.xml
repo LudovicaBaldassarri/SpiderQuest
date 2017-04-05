@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Spider Quest</string>
-    <string name="gioca">Gioca</string>
-    <string name="istruzioni">Istruzioni</string>
-    <string name="menu">Menù</string>
-    <string name="istruzioni1">Sul display al centro della ragnatela ci sono
+<string name="compila">Inserisci nei campi sottostanti l\'indirizzo IP della ragnatela per poter iniziare a giocare.</string>
+<string name="gioca">Gioca</string>
+<string name="inizia">Inizia</string>
+<string name="istruzioni">Istruzioni</string>
+<string name="istruzioni1">Sul display al centro della ragnatela ci sono
     tre ragni, pronti a nascondersi lungo le diramazioni della ragnatela.
     </string>
-    <string name="istruzioni2">Fai attenzione ai led che si illuminano:
+<string name="istruzioni2">Fai attenzione ai led che si illuminano:
     mostreranno il percorso del ragno del colore corrispondente.</string>
-    <string name="istruzioni3">Quando i led si spengono, significa che i ragni si sono nascosti
+<string name="istruzioni3">Quando i led si spengono, significa che i ragni si sono nascosti
     in uno dei nodi. Trascina il ragno sul giusto nodo, in modo da accumulare punti.</string>
-    <string name="istruzioni4">Se indovini dove i ragni sono nascosti, il gioco prosegue,
+<string name="istruzioni4">Se indovini dove i ragni sono nascosti, il gioco prosegue,
     ma attenzione: man mano che si va avanti, i ragni si muoveranno più veleocemente lungo
     la ragnatela.</string>
+<string name="menu">Menù</string>
 </resources>

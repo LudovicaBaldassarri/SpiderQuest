@@ -27,7 +27,8 @@
                android:layout_alignParentTop="true"
                android:layout_alignParentLeft="true"
                android:layout_alignParentStart="true"
-               android:id="@+id/gioca_istruzioni3" />
+               android:id="@+id/gioca_istruzioni3"
+               android:onClick="openInizio"/>
 
            <Button
                android:text="@string/menu"

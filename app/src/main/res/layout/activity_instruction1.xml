@@ -27,7 +27,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/gioca_istruzioni1"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:onClick="openInizio"/>
 
             <Button
                 android:text="@string/menu"

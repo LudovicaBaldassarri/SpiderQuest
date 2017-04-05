@@ -624,5 +624,9 @@ public class Inizio extends AppCompatActivity {
         return pixels_array;
     }
 
+    public void openInstruction(View view) {
+        Intent intent = new Intent(this, Instruction1Activity.class);
+        startActivity(intent);
+    }
 
 }

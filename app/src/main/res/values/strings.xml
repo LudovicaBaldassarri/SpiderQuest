@@ -10,4 +10,6 @@
         one of the hubs. Drag the spider on the right hub, in order to collect points.</string>
     <string name="istruzioni4">If you guess right where the spiders are hiding, the game goes on,
     but be careful: as it goes on, the spiders are going to move faster along the web.</string>
+    <string name="compila">Fill the form below with the IP address of the web in order to begin to play. </string>
+    <string name="inizia">Start</string>
 </resources>

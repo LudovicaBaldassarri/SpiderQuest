@@ -4,14 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.alessia.appragni.Inizio">
+    tools:context="com.example.alessia.appragni.Inizio"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/introduzione">
+
+        <TextView
+            android:text="@string/compila"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/compila"
+            android:textAlignment="center"
+            android:textSize="24dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginLeft="48dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:id="@+id/ip_box">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/linearLayoutCompat"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:id="@+id/ip_write">
 
         <EditText
@@ -19,64 +51,106 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="192"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textSize="48dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="." />
+            android:text="."
+            android:textSize="48dp"/>
 
         <EditText
             android:id="@+id/second_byte_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="168"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textSize="48dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="." />
+            android:text="."
+            android:textSize="48dp"/>
 
         <EditText
             android:id="@+id/third_byte_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="1"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textSize="48dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="." />
+            android:text="."
+            android:textSize="48dp"/>
 
         <EditText
             android:id="@+id/fourth_byte_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="32"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textSize="48dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=":" />
+            android:text=":"
+            android:textSize="48dp"/>
 
         <EditText
             android:id="@+id/host_port"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="8080"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textSize="48dp"/>
+
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/play"
-        android:layout_width="wrap_content"
+
+
+</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="99dp"
-        tools:layout_editor_absoluteY="118dp" />
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/bottoni"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/play"
+            android:layout_width="192dp"
+            android:layout_height="48dp"
+            android:text="@string/inizia"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            tools:layout_editor_absoluteX="99dp"
+            tools:layout_editor_absoluteY="118dp" />
+
+        <Button
+            android:id="@+id/istruzioni"
+            android:layout_width="192dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:text="@string/istruzioni"
+            android:onClick="openInstruction"/>
+
+    </RelativeLayout>
+
+
+
 
 </RelativeLayout>

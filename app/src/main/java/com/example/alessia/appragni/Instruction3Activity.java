@@ -29,4 +29,9 @@ public class Instruction3Activity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
+
+    public void openInizio(View view){
+        Intent intent=new Intent(this, Inizio.class);
+        startActivity(intent);
+    }
 }
