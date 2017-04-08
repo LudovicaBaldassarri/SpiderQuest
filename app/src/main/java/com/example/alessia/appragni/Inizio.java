@@ -77,6 +77,9 @@ public class Inizio extends AppCompatActivity {
     int bdest;
     int i;
     int rd;
+    int endXtmp;
+    int endYtmp;
+    int desttmp;
 
     Unbinder unbinder;
 
@@ -243,8 +246,6 @@ public class Inizio extends AppCompatActivity {
     void destinationCalculate(){
         try{
 
-
-
             for(i=0;i<3;i++) {
                 int index = new Random().nextInt(exit.length);
                 rd = exit[index];
@@ -273,89 +274,20 @@ public class Inizio extends AppCompatActivity {
             gdestp = dest[1];
             bdestp = dest[2];
 
+            coordinatesCalculate(rdestp);
+            endXRA = endXtmp;
+            endYRA = endYtmp;
+            rdest = desttmp;
 
-            switch (rdestp) {
-                case 1:
-                    endXRA = 15;
-                    endYRA = -4;
-                    rdest = 0;
-                    break;
-                case 2:
-                    endXRA = 35;
-                    endYRA = 10;
-                    rdest = 52;
-                    break;
-                case 3:
-                    endXRA = 35;
-                    endYRA = 26;
-                    rdest = 186;
-                    break;
-                case 4:
-                    endXRA = -4;
-                    endYRA = 26;
-                    rdest = 318;
-                    break;
-                case 5:
-                    endXRA = -4;
-                    endYRA = 10;
-                    rdest = 424;
-                    break;
-            }
-            switch (gdestp) {
-                case 1:
-                    endXGA = 15;
-                    endYGA = -4;
-                    gdest = 0;
-                    break;
-                case 2:
-                    endXGA = 35;
-                    endYGA = 10;
-                    gdest = 52;
-                    break;
-                case 3:
-                    endXGA = 35;
-                    endYGA = 26;
-                    gdest = 186;
-                    break;
-                case 4:
-                    endXGA = -4;
-                    endYGA = 26;
-                    gdest = 318;
-                    break;
-                case 5:
-                    endXGA = -4;
-                    endYGA = 10;
-                    gdest = 424;
-                    break;
-            }
-            switch (bdestp) {
-                case 1:
-                    endXBA = 15;
-                    endYBA = -4;
-                    bdest = 0;
-                    break;
-                case 2:
-                    endXBA = 35;
-                    endYBA = 10;
-                    bdest = 52;
-                    break;
-                case 3:
-                    endXBA = 35;
-                    endYBA = 26;
-                    bdest = 186;
-                    break;
-                case 4:
-                    endXBA = -4;
-                    endYBA = 26;
-                    bdest = 318;
-                    break;
-                case 5:
-                    endXBA = -4;
-                    endYBA = 10;
-                    bdest = 424;
-                    break;
-            }
+            coordinatesCalculate(gdestp);
+            endXGA = endXtmp;
+            endYGA = endYtmp;
+            gdest = desttmp;
 
+            coordinatesCalculate(bdestp);
+            endXBA = endXtmp;
+            endYBA = endYtmp;
+            bdest = desttmp;
 
             distXRA = endXRA-beginXRA;
             distYRA = endYRA-beginYRA;
@@ -371,10 +303,89 @@ public class Inizio extends AppCompatActivity {
 
             showSpiders();
 
+            startTest(rdest, gdest, bdest);
+
         }catch(Exception e){
 
         }
 
+    }
+
+    private void coordinatesCalculate(int destp) {
+        switch (destp) {
+            case 1:
+                endXtmp = 15;
+                endYtmp = -4;
+                desttmp = 0;
+                break;
+            case 2:
+                endXtmp = 35;
+                endYtmp = 10;
+                desttmp = 52;
+                break;
+            case 3:
+                endXtmp = 35;
+                endYtmp = 26;
+                desttmp = 186;
+                break;
+            case 4:
+                endXtmp = -4;
+                endYtmp = 26;
+                desttmp = 318;
+                break;
+            case 5:
+                endXtmp = -4;
+                endYtmp = 10;
+                desttmp = 424;
+                break;
+        }
+    }
+
+    private void startTest(int rdest, int gdest, int bdest){
+        JSONArray pixels_array = preparePixelsArray();
+        try {
+            for (int i = 0; i < pixels_array.length(); i++) {
+                ((JSONObject) pixels_array.get(i)).put("r", 255);
+                ((JSONObject) pixels_array.get(i)).put("g", 255);
+                ((JSONObject) pixels_array.get(i)).put("b", 255);
+            }
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0 ,0);
+            Thread.sleep(100);
+            int firsts[] = {0, 52, 186, 318, 424};
+            //int first = firsts[(int) (Math.random() * 5)];
+            int first = 186;
+            int current = first;
+            int next = 0;
+            boolean justTurned = false;
+            boolean direction = true; //true; ++; false: --
+            int previous = 0;
+            boolean stop = false;
+            while (!stop) {
+                if(current==first) {
+                    ((JSONObject) pixels_array.get(current)).put("r", 255);
+                    ((JSONObject) pixels_array.get(current)).put("g", 0);
+                    ((JSONObject) pixels_array.get(current)).put("b", 0);
+                } else {
+                    ((JSONObject) pixels_array.get(current)).put("r", 255);
+                    ((JSONObject) pixels_array.get(current)).put("g", 0);
+                    ((JSONObject) pixels_array.get(current)).put("b", 0);
+                    ((JSONObject) pixels_array.get(previous)).put("r", 255);
+                    ((JSONObject) pixels_array.get(previous)).put("g", 255);
+                    ((JSONObject) pixels_array.get(previous)).put("b", 255);
+                }
+                previous = current;
+                if (current == 201 && justTurned == false) {
+                    next = 559;
+                    current = next;
+                } else {
+                    current ++;
+                }
+                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
+                Thread.sleep(100);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     int computeIndex(int x, int y){

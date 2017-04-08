@@ -78,7 +78,7 @@
             android:id="@+id/third_byte_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="1"
+            android:hint="2"
             android:inputType="number"
             android:textSize="48dp"/>
 
@@ -92,7 +92,7 @@
             android:id="@+id/fourth_byte_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="32"
+            android:hint="3"
             android:inputType="number"
             android:textSize="48dp"/>
 
