@@ -246,6 +246,10 @@ public class Inizio extends AppCompatActivity {
     void destinationCalculate(){
         try{
 
+            JSONArray pixels_array = preparePixelsArray();
+
+            ledGridInitialization(pixels_array);
+
             for(i=0;i<3;i++) {
                 int index = new Random().nextInt(exit.length);
                 rd = exit[index];
@@ -303,12 +307,25 @@ public class Inizio extends AppCompatActivity {
 
             showSpiders();
 
-            startTest(rdest, gdest, bdest);
+            startTest(rdest, gdest, bdest, pixels_array);
 
         }catch(Exception e){
 
         }
 
+    }
+
+    private void ledGridInitialization(JSONArray pixels_array) {
+        try {
+            for (int i = 0; i < pixels_array.length(); i++) {
+                ((JSONObject) pixels_array.get(i)).put("r", 255);
+                ((JSONObject) pixels_array.get(i)).put("g", 255);
+                ((JSONObject) pixels_array.get(i)).put("b", 255);
+            }
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void coordinatesCalculate(int destp) {
@@ -341,19 +358,10 @@ public class Inizio extends AppCompatActivity {
         }
     }
 
-    private void startTest(int rdest, int gdest, int bdest){
-        JSONArray pixels_array = preparePixelsArray();
-        try {
-            for (int i = 0; i < pixels_array.length(); i++) {
-                ((JSONObject) pixels_array.get(i)).put("r", 255);
-                ((JSONObject) pixels_array.get(i)).put("g", 255);
-                ((JSONObject) pixels_array.get(i)).put("b", 255);
-            }
-            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0 ,0);
+    private void startTest(int rdest, int gdest, int bdest, JSONArray pixels_array){
+        try{
             Thread.sleep(100);
-            int firsts[] = {0, 52, 186, 318, 424};
-            //int first = firsts[(int) (Math.random() * 5)];
-            int first = 186;
+            int first = rdest;
             int current = first;
             int next = 0;
             boolean justTurned = false;
@@ -374,11 +382,13 @@ public class Inizio extends AppCompatActivity {
                     ((JSONObject) pixels_array.get(previous)).put("b", 255);
                 }
                 previous = current;
-                if (current == 201 && justTurned == false) {
+                if (current == 201 && !!justTurned) {
                     next = 559;
                     current = next;
+                    justTurned = true;
                 } else {
                     current ++;
+                    justTurned = false;
                 }
                 handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
                 Thread.sleep(100);
