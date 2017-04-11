@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -75,11 +76,39 @@ public class Inizio extends AppCompatActivity {
     int gdest;
     int bdestp;
     int bdest;
-    int i;
+    //int i;
     int rd;
     int endXtmp;
     int endYtmp;
     int desttmp;
+
+    int[] nodeA_a = {5,46,522};
+    int[] nodeA_b = {15,36,790};
+    int[] nodeA_c = {25, 1071};
+
+    int[] nodeB_a = {65,172,543};
+    int[] nodeB_b = {86,150,651};
+    int[] nodeB_c = {108,128,843};
+
+    int[] nodeC_a = {202,302,558};
+    int[] nodeC_b = {218,285,685};
+    int[] nodeC_c = {234,270,904};
+
+    int[] nodeD_a = {330,410,577};
+    int[] nodeD_b = {345,395,728};
+    int[] nodeD_c = {360,382,975};
+
+    int[] nodeE_a = {434,512,598};
+    int[] nodeE_b = {446,498,765};
+    int[] nodeE_c = {462,482,1032};
+
+    int[][] nodes = {nodeA_a,nodeA_b,nodeA_c,nodeB_a,nodeB_b,nodeB_c,nodeC_a,nodeC_b,nodeC_c,nodeD_a,nodeD_b,nodeD_c,nodeE_a,nodeE_b,nodeE_c};
+
+    int node; //index
+
+    int rstopped;
+    int gstopped;
+    int bstopped;
 
     Unbinder unbinder;
 
@@ -248,9 +277,9 @@ public class Inizio extends AppCompatActivity {
 
             JSONArray pixels_array = preparePixelsArray();
 
-            ledGridInitialization(pixels_array);
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
 
-            for(i=0;i<3;i++) {
+            for(int i=0;i<3;i++) {
                 int index = new Random().nextInt(exit.length);
                 rd = exit[index];
 
@@ -309,23 +338,14 @@ public class Inizio extends AppCompatActivity {
 
             startTest(rdest, gdest, bdest, pixels_array);
 
+            System.out.print(rstopped);
+            System.out.print(gstopped);
+            System.out.print(bstopped);
+
         }catch(Exception e){
 
         }
 
-    }
-
-    private void ledGridInitialization(JSONArray pixels_array) {
-        try {
-            for (int i = 0; i < pixels_array.length(); i++) {
-                ((JSONObject) pixels_array.get(i)).put("r", 255);
-                ((JSONObject) pixels_array.get(i)).put("g", 255);
-                ((JSONObject) pixels_array.get(i)).put("b", 255);
-            }
-            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void coordinatesCalculate(int destp) {
@@ -361,41 +381,470 @@ public class Inizio extends AppCompatActivity {
     private void startTest(int rdest, int gdest, int bdest, JSONArray pixels_array){
         try{
             Thread.sleep(100);
-            int first = rdest;
-            int current = first;
-            int next = 0;
-            boolean justTurned = false;
-            boolean direction = true; //true; ++; false: --
-            int previous = 0;
-            boolean stop = false;
-            while (!stop) {
-                if(current==first) {
-                    ((JSONObject) pixels_array.get(current)).put("r", 255);
-                    ((JSONObject) pixels_array.get(current)).put("g", 0);
-                    ((JSONObject) pixels_array.get(current)).put("b", 0);
-                } else {
-                    ((JSONObject) pixels_array.get(current)).put("r", 255);
-                    ((JSONObject) pixels_array.get(current)).put("g", 0);
-                    ((JSONObject) pixels_array.get(current)).put("b", 0);
-                    ((JSONObject) pixels_array.get(previous)).put("r", 255);
-                    ((JSONObject) pixels_array.get(previous)).put("g", 255);
-                    ((JSONObject) pixels_array.get(previous)).put("b", 255);
+            int rfirst = rdest;
+            int gfirst = gdest;
+            int bfirst = bdest;
+
+            int rcurrent = rfirst;
+            int gcurrent = gfirst;
+            int bcurrent = bfirst;
+
+            int rnext = 0;
+            int gnext = 0;
+            int bnext = 0;
+
+            int rprevious = 0;
+            int gprevious = 0;
+            int bprevious = 0;
+
+            int rindex = 0;
+            int gindex = 0;
+            int bindex = 0;
+            Random indexGenerator = new Random();
+
+            boolean rjustTurned = false;
+            boolean gjustTurned = false;
+            boolean bjustTurned = false;
+
+            boolean rdirection = true; //true; ++; false: --
+            boolean gdirection = true; //true; ++; false: --
+            boolean bdirection = true; //true; ++; false: --
+            Random directionGenerator = new Random();
+
+            boolean rstop = false;
+            boolean gstop = false;
+            boolean bstop = false;
+            Random stopGenerator = new Random();
+
+            int rcounter = 0;
+            int gcounter = 0;
+            int bcounter = 0;
+
+            while(!(rstop && gstop && bstop)){
+                if(!rstop){
+                    ((JSONObject) pixels_array.get(rcurrent)).put("r", 255);
+                    ((JSONObject) pixels_array.get(rcurrent)).put("g", 0);
+                    ((JSONObject) pixels_array.get(rcurrent)).put("b", 0);
+                    if(rcurrent!=rfirst) {
+                        if (isInNode(rprevious)){
+                            if(gstopped == node && gstop){
+                                ((JSONObject) pixels_array.get(rprevious)).put("r", 0);
+                                ((JSONObject) pixels_array.get(rprevious)).put("g", 255);
+                                ((JSONObject) pixels_array.get(rprevious)).put("b", 0);
+                            } else {
+                                if(bstopped == node && bstop){
+                                    ((JSONObject) pixels_array.get(rprevious)).put("r", 0);
+                                    ((JSONObject) pixels_array.get(rprevious)).put("g", 0);
+                                    ((JSONObject) pixels_array.get(rprevious)).put("b", 255);
+                                } else {
+                                    ((JSONObject) pixels_array.get(rprevious)).put("r", 0);
+                                    ((JSONObject) pixels_array.get(rprevious)).put("g", 0);
+                                    ((JSONObject) pixels_array.get(rprevious)).put("b", 0);
+                                }
+                            }
+                        } else {
+                            ((JSONObject) pixels_array.get(rprevious)).put("r", 255);
+                            ((JSONObject) pixels_array.get(rprevious)).put("g", 255);
+                            ((JSONObject) pixels_array.get(rprevious)).put("b", 255);
+                        }
+                    }
+                    rprevious = rcurrent;
+                    if (isInNode(rcurrent) && !rjustTurned) {
+                        rindex = indexGenerator.nextInt(nodes[node].length);
+                        rnext = nodes[node][rindex];
+                        rstopped = node;
+                        if(rnext != rcurrent){
+                            rdirection = directionGenerator.nextBoolean();
+                        }
+                        rjustTurned = true;
+                        if (!(rstopped == gstopped && gstop) && !(rstopped == bstopped && bstop)){
+                            rcounter++;
+                            rstop = (stopGenerator.nextInt(100) < (rcounter*10));
+                        } else rcounter--;
+                    } else {
+                        if(rdirection){
+                            switch(rcurrent){
+                                case 46: rnext = 6;
+                                    break;
+                                case 108: rnext = 129;
+                                    break;
+                                case 172: rnext = 66;
+                                    break;
+                                case 234: rnext = 271;
+                                    break;
+                                case 302: rnext = 203;
+                                    break;
+                                case 360: rnext = 383;
+                                    break;
+                                case 410: rnext = 331;
+                                    break;
+                                case 462: rnext = 483;
+                                    break;
+                                case 512: rnext = 453;
+                                    break;
+                                case 612: rnext = 522;
+                                    break;
+                                case 790: rnext = 613;
+                                    break;
+                                case 1071: rnext = 791;
+                                    break;
+                                default: rnext = rcurrent+1;
+                                    break;
+                            }
+                        } else {
+                            switch(rcurrent){
+                                case 5: rnext = 45;
+                                    break;
+                                case 65: rnext = 171;
+                                    break;
+                                case 128: rnext = 107;
+                                    break;
+                                case 202: rnext = 301;
+                                    break;
+                                case 270: rnext = 233;
+                                    break;
+                                case 330: rnext = 409;
+                                    break;
+                                case 382: rnext = 359;
+                                    break;
+                                case 434: rnext = 511;
+                                    break;
+                                case 482: rnext = 461;
+                                    break;
+                                case 522: rnext = 612;
+                                    break;
+                                case 613: rnext = 790;
+                                    break;
+                                case 791: rnext = 1071;
+                                    break;
+                                default: rnext = rcurrent-1;
+                                    break;
+                            }
+                        }
+                        rjustTurned = false;
+                    }
+                    rcurrent = rnext;
                 }
-                previous = current;
-                if (current == 201 && !!justTurned) {
-                    next = 559;
-                    current = next;
-                    justTurned = true;
-                } else {
-                    current ++;
-                    justTurned = false;
+                if(!gstop){
+                    ((JSONObject) pixels_array.get(gcurrent)).put("r", 0);
+                    ((JSONObject) pixels_array.get(gcurrent)).put("g", 255);
+                    ((JSONObject) pixels_array.get(gcurrent)).put("b", 0);
+                    if(gcurrent!=gfirst) {
+                        if (isInNode(gprevious)){
+                            if(rstopped == node && rstop){
+                                ((JSONObject) pixels_array.get(gprevious)).put("r", 255);
+                                ((JSONObject) pixels_array.get(gprevious)).put("g", 0);
+                                ((JSONObject) pixels_array.get(gprevious)).put("b", 0);
+                            } else {
+                                if(bstopped == node && bstop){
+                                    ((JSONObject) pixels_array.get(gprevious)).put("r", 0);
+                                    ((JSONObject) pixels_array.get(gprevious)).put("g", 0);
+                                    ((JSONObject) pixels_array.get(gprevious)).put("b", 255);
+                                } else {
+                                    ((JSONObject) pixels_array.get(gprevious)).put("r", 0);
+                                    ((JSONObject) pixels_array.get(gprevious)).put("g", 0);
+                                    ((JSONObject) pixels_array.get(gprevious)).put("b", 0);
+                                }
+                            }
+                        } else {
+                            ((JSONObject) pixels_array.get(gprevious)).put("r", 255);
+                            ((JSONObject) pixels_array.get(gprevious)).put("g", 255);
+                            ((JSONObject) pixels_array.get(gprevious)).put("b", 255);
+                        }
+                    }
+                    gprevious = gcurrent;
+                    if (isInNode(gcurrent) && !gjustTurned) {
+                        gindex = indexGenerator.nextInt(nodes[node].length);
+                        gnext = nodes[node][gindex];
+                        gstopped = node;
+                        if(gnext != gcurrent){
+                            gdirection = directionGenerator.nextBoolean();
+                        }
+                        gjustTurned = true;
+                        if (!(gstopped == rstopped && rstop) && !(gstopped == bstopped && bstop)){
+                            gcounter++;
+                            gstop = (stopGenerator.nextInt(100) < (gcounter*10));
+                        } else gcounter--;
+                    } else {
+                        if(gdirection){
+                            switch(gcurrent){
+                                case 46: gnext = 6;
+                                    break;
+                                case 108: gnext = 129;
+                                    break;
+                                case 172: gnext = 66;
+                                    break;
+                                case 234: gnext = 271;
+                                    break;
+                                case 302: gnext = 203;
+                                    break;
+                                case 360: gnext = 383;
+                                    break;
+                                case 410: gnext = 331;
+                                    break;
+                                case 462: gnext = 483;
+                                    break;
+                                case 512: gnext = 453;
+                                    break;
+                                case 612: gnext = 522;
+                                    break;
+                                case 790: gnext = 613;
+                                    break;
+                                case 1071: gnext = 791;
+                                    break;
+                                default: gnext = gcurrent+1;
+                                    break;
+                            }
+                        } else {
+                            switch(gcurrent){
+                                case 5: gnext = 45;
+                                    break;
+                                case 65: gnext = 171;
+                                    break;
+                                case 128: gnext = 107;
+                                    break;
+                                case 202: gnext = 301;
+                                    break;
+                                case 270: gnext = 233;
+                                    break;
+                                case 330: gnext = 409;
+                                    break;
+                                case 382: gnext = 359;
+                                    break;
+                                case 434: gnext = 511;
+                                    break;
+                                case 482: gnext = 461;
+                                    break;
+                                case 522: gnext = 612;
+                                    break;
+                                case 613: gnext = 790;
+                                    break;
+                                case 791: gnext = 1071;
+                                    break;
+                                default: gnext = gcurrent-1;
+                                    break;
+                            }
+                        }
+                        gjustTurned = false;
+                    }
+                    gcurrent = gnext;
+                }
+                if(!bstop){
+                    ((JSONObject) pixels_array.get(bcurrent)).put("r", 0);
+                    ((JSONObject) pixels_array.get(bcurrent)).put("g", 0);
+                    ((JSONObject) pixels_array.get(bcurrent)).put("b", 255);
+                    if(bcurrent!=bfirst) {
+                        if (isInNode(bprevious)){
+                            if(rstopped == node && rstop){
+                                ((JSONObject) pixels_array.get(bprevious)).put("r", 255);
+                                ((JSONObject) pixels_array.get(bprevious)).put("g", 0);
+                                ((JSONObject) pixels_array.get(bprevious)).put("b", 0);
+                            } else {
+                                if(gstopped == node && gstop){
+                                    ((JSONObject) pixels_array.get(bprevious)).put("r", 0);
+                                    ((JSONObject) pixels_array.get(bprevious)).put("g", 255);
+                                    ((JSONObject) pixels_array.get(bprevious)).put("b", 0);
+                                } else {
+                                    ((JSONObject) pixels_array.get(bprevious)).put("r", 0);
+                                    ((JSONObject) pixels_array.get(bprevious)).put("g", 0);
+                                    ((JSONObject) pixels_array.get(bprevious)).put("b", 0);
+                                }
+                            }
+                        } else {
+                            ((JSONObject) pixels_array.get(bprevious)).put("r", 255);
+                            ((JSONObject) pixels_array.get(bprevious)).put("g", 255);
+                            ((JSONObject) pixels_array.get(bprevious)).put("b", 255);
+                        }
+                    }
+                    bprevious = bcurrent;
+                    if (isInNode(bcurrent) && !bjustTurned) {
+                        bindex = indexGenerator.nextInt(nodes[node].length);
+                        bnext = nodes[node][bindex];
+                        bstopped = node;
+                        if(bnext != bcurrent){
+                            bdirection = directionGenerator.nextBoolean();
+                        }
+                        bjustTurned = true;
+                        if (!(bstopped == rstopped && rstop) && !(bstopped == gstopped && gstop)){
+                            bcounter++;
+                            bstop = (stopGenerator.nextInt(100) < (bcounter*10));
+                        } else bcounter--;
+                    } else {
+                        if(bdirection){
+                            switch(bcurrent){
+                                case 46: bnext = 6;
+                                    break;
+                                case 108: bnext = 129;
+                                    break;
+                                case 172: bnext = 66;
+                                    break;
+                                case 234: bnext = 271;
+                                    break;
+                                case 302: bnext = 203;
+                                    break;
+                                case 360: bnext = 383;
+                                    break;
+                                case 410: bnext = 331;
+                                    break;
+                                case 462: bnext = 483;
+                                    break;
+                                case 512: bnext = 453;
+                                    break;
+                                case 612: bnext = 522;
+                                    break;
+                                case 790: bnext = 613;
+                                    break;
+                                case 1071: bnext = 791;
+                                    break;
+                                default: bnext = bcurrent+1;
+                                    break;
+                            }
+                        } else {
+                            switch(bcurrent){
+                                case 5: bnext = 45;
+                                    break;
+                                case 65: bnext = 171;
+                                    break;
+                                case 128: bnext = 107;
+                                    break;
+                                case 202: bnext = 301;
+                                    break;
+                                case 270: bnext = 233;
+                                    break;
+                                case 330: bnext = 409;
+                                    break;
+                                case 382: bnext = 359;
+                                    break;
+                                case 434: bnext = 511;
+                                    break;
+                                case 482: bnext = 461;
+                                    break;
+                                case 522: bnext = 612;
+                                    break;
+                                case 613: bnext = 790;
+                                    break;
+                                case 791: bnext = 1071;
+                                    break;
+                                default: bnext = bcurrent-1;
+                                    break;
+                            }
+                        }
+                        bjustTurned = false;
+                    }
+                    bcurrent = bnext;
                 }
                 handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
                 Thread.sleep(100);
             }
+
+            /*while (!stop) {
+                ((JSONObject) pixels_array.get(current)).put("r", 255);
+                ((JSONObject) pixels_array.get(current)).put("g", 0);
+                ((JSONObject) pixels_array.get(current)).put("b", 0);
+                if(current!=first) {
+                    if (isInNode(previous)){
+                        ((JSONObject) pixels_array.get(previous)).put("r", 0);
+                        ((JSONObject) pixels_array.get(previous)).put("g", 0);
+                        ((JSONObject) pixels_array.get(previous)).put("b", 0);
+                    } else {
+                        ((JSONObject) pixels_array.get(previous)).put("r", 255);
+                        ((JSONObject) pixels_array.get(previous)).put("g", 255);
+                        ((JSONObject) pixels_array.get(previous)).put("b", 255);
+                    }
+                }
+                previous = current;
+                if (isInNode(current) && !justTurned) {
+                    index = indexGenerator.nextInt(nodes[node].length);
+                    next = nodes[node][index];
+                    if(next != current){
+                        direction = directionGenerator.nextBoolean();
+                    }
+                    justTurned = true;
+                    counter++;
+                    stop = (stopGenerator.nextInt(100) < (counter*10));
+                } else {
+                    if(direction){
+                        switch(current){
+                            case 46: next = 6;
+                                break;
+                            case 108: next = 129;
+                                break;
+                            case 172: next = 66;
+                                break;
+                            case 234: next = 271;
+                                break;
+                            case 302: next = 203;
+                                break;
+                            case 360: next = 383;
+                                break;
+                            case 410: next = 331;
+                                break;
+                            case 462: next = 483;
+                                break;
+                            case 512: next = 453;
+                                break;
+                            case 612: next = 522;
+                                break;
+                            case 790: next = 613;
+                                break;
+                            case 1071: next = 791;
+                                break;
+                            default: next = current+1;
+                                break;
+                        }
+                    } else {
+                        switch(current){
+                            case 5: next = 45;
+                                break;
+                            case 65: next = 171;
+                                break;
+                            case 128: next = 107;
+                                break;
+                            case 202: next = 301;
+                                break;
+                            case 270: next = 233;
+                                break;
+                            case 330: next = 409;
+                                break;
+                            case 382: next = 359;
+                                break;
+                            case 434: next = 511;
+                                break;
+                            case 482: next = 461;
+                                break;
+                            case 522: next = 612;
+                                break;
+                            case 613: next = 790;
+                                break;
+                            case 791: next = 1071;
+                                break;
+                            default: next = current-1;
+                                break;
+                        }
+                    }
+                    justTurned = false;
+                }
+                current = next;
+                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
+                Thread.sleep(100);
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isInNode(int current){
+        int tmp;
+        for (int i = 0; i < nodes.length; i++) {
+            for (int j = 0; j < nodes[i].length; j++) {
+                tmp = nodes[i][j];
+                if(tmp == current) {
+                    node = i;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     int computeIndex(int x, int y){
@@ -620,22 +1069,14 @@ public class Inizio extends AppCompatActivity {
             for (int i = 0; i < 1072; i++) {
                 tmp = new JSONObject();
                 tmp.put("a", 0);
-                if (i < 522) {
-                    tmp.put("g", 255);
-                    tmp.put("b", 0);
-                    tmp.put("r", 0);
-                } else if (i < 613) {
-                    tmp.put("r", 255);
+                if (isInNode(i)) {
                     tmp.put("g", 0);
                     tmp.put("b", 0);
-                } else if (i < 791) {
-                    tmp.put("b", 255);
-                    tmp.put("g", 0);
                     tmp.put("r", 0);
                 } else {
-                    tmp.put("b", 255);
-                    tmp.put("g", 0);
                     tmp.put("r", 255);
+                    tmp.put("g", 255);
+                    tmp.put("b", 255);
                 }
                 pixels_array.put(tmp);
             }
