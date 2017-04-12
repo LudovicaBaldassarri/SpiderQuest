@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/easy"
+            android:title="Facile" >
+        </item>
+        <item android:id="@+id/normal"
+            android:title="Normale">
+        </item>
+        <item android:id="@+id/hard"
+            android:title="Difficile">
+        </item>
+    </group>
+</menu>

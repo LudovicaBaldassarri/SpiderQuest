@@ -129,7 +129,7 @@
 
         <Button
             android:id="@+id/play"
-            android:layout_width="192dp"
+            android:layout_width="152dp"
             android:layout_height="48dp"
             android:text="@string/inizia"
             android:layout_alignParentTop="true"
@@ -139,8 +139,17 @@
             tools:layout_editor_absoluteY="118dp" />
 
         <Button
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:onClick="showPopup"
+            android:text="Impostazioni" />
+
+        <Button
             android:id="@+id/istruzioni"
-            android:layout_width="192dp"
+            android:layout_width="152dp"
             android:layout_height="48dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
