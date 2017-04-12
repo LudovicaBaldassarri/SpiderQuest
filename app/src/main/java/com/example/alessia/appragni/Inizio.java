@@ -6,9 +6,15 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.View;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.PopupMenu;
+import android.widget.Toast;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +45,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.Locale;
 
+@SuppressLint("NewApi")
 public class Inizio extends AppCompatActivity {
 
     int beginXRA=9;
@@ -109,6 +116,8 @@ public class Inizio extends AppCompatActivity {
     int rstopped;
     int gstopped;
     int bstopped;
+
+    int speed = 100;
 
     Unbinder unbinder;
 
@@ -427,12 +436,12 @@ public class Inizio extends AppCompatActivity {
                     ((JSONObject) pixels_array.get(rcurrent)).put("b", 0);
                     if(rcurrent!=rfirst) {
                         if (isInNode(rprevious)){
-                            if(gstopped == node && gstop){
+                            if(rprevious == nodes[gstopped][gindex] && gstop){
                                 ((JSONObject) pixels_array.get(rprevious)).put("r", 0);
                                 ((JSONObject) pixels_array.get(rprevious)).put("g", 255);
                                 ((JSONObject) pixels_array.get(rprevious)).put("b", 0);
                             } else {
-                                if(bstopped == node && bstop){
+                                if(rprevious == nodes[bstopped][bindex] && bstop){
                                     ((JSONObject) pixels_array.get(rprevious)).put("r", 0);
                                     ((JSONObject) pixels_array.get(rprevious)).put("g", 0);
                                     ((JSONObject) pixels_array.get(rprevious)).put("b", 255);
@@ -531,12 +540,12 @@ public class Inizio extends AppCompatActivity {
                     ((JSONObject) pixels_array.get(gcurrent)).put("b", 0);
                     if(gcurrent!=gfirst) {
                         if (isInNode(gprevious)){
-                            if(rstopped == node && rstop){
+                            if(gprevious == nodes[rstopped][rindex] && rstop){
                                 ((JSONObject) pixels_array.get(gprevious)).put("r", 255);
                                 ((JSONObject) pixels_array.get(gprevious)).put("g", 0);
                                 ((JSONObject) pixels_array.get(gprevious)).put("b", 0);
                             } else {
-                                if(bstopped == node && bstop){
+                                if(gprevious == nodes[bstopped][bindex] && bstop){
                                     ((JSONObject) pixels_array.get(gprevious)).put("r", 0);
                                     ((JSONObject) pixels_array.get(gprevious)).put("g", 0);
                                     ((JSONObject) pixels_array.get(gprevious)).put("b", 255);
@@ -635,12 +644,12 @@ public class Inizio extends AppCompatActivity {
                     ((JSONObject) pixels_array.get(bcurrent)).put("b", 255);
                     if(bcurrent!=bfirst) {
                         if (isInNode(bprevious)){
-                            if(rstopped == node && rstop){
+                            if(bprevious == nodes[rstopped][rindex] && rstop){
                                 ((JSONObject) pixels_array.get(bprevious)).put("r", 255);
                                 ((JSONObject) pixels_array.get(bprevious)).put("g", 0);
                                 ((JSONObject) pixels_array.get(bprevious)).put("b", 0);
                             } else {
-                                if(gstopped == node && gstop){
+                                if(bprevious == nodes[gstopped][bindex] && gstop){
                                     ((JSONObject) pixels_array.get(bprevious)).put("r", 0);
                                     ((JSONObject) pixels_array.get(bprevious)).put("g", 255);
                                     ((JSONObject) pixels_array.get(bprevious)).put("b", 0);
@@ -734,7 +743,7 @@ public class Inizio extends AppCompatActivity {
                     bcurrent = bnext;
                 }
                 handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
-                Thread.sleep(100);
+                Thread.sleep(speed);
             }
 
             /*while (!stop) {
@@ -857,6 +866,31 @@ public class Inizio extends AppCompatActivity {
             ((JSONObject) pixels_array.get(i)).put("g", 0);
             ((JSONObject) pixels_array.get(i)).put("b", 0);
         }
+    }
+
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.easy:
+                        speed = 400; break;
+                    case R.id.normal:
+                        speed = 200; break;
+                    case R.id.hard:
+                        speed = 100; break;
+                    default:
+                        speed = 100; break;
+                }
+
+                return true;
+            }
+        });
+        inflater.inflate(R.menu.activity_inizio, popup.getMenu());
+        popup.show();
     }
 
     void turnOnLed(String spiderColor, int x, int y) throws JSONException{
