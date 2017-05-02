@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.example.alessia.appragni.prova">
+
+    <TextView
+        android:id="@+id/redposition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff0000"
+        android:textSize="30pt"
+        />
+
+    <TextView
+        android:id="@+id/greenposition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#009900"
+        android:textSize="30pt"
+        />
+
+    <TextView
+        android:id="@+id/blueposition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#0000ff"
+        android:textSize="30pt"
+        />
+
+</LinearLayout>

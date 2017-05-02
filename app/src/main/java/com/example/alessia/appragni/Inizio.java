@@ -351,6 +351,18 @@ public class Inizio extends AppCompatActivity {
             System.out.print(gstopped);
             System.out.print(bstopped);
 
+            findViewById(R.id.play).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(Inizio.this, prova.class);
+                    intent.putExtra("Red", rstopped);
+                    intent.putExtra("Green", gstopped);
+                    intent.putExtra("Blue", bstopped);
+                    startActivity(intent);
+                }
+            },1000);
+
+
         }catch(Exception e){
 
         }
@@ -1123,6 +1135,16 @@ public class Inizio extends AppCompatActivity {
     public void openInstruction(View view) {
         Intent intent = new Intent(this, Instruction1Activity.class);
         startActivity(intent);
+    }
+
+    public int getStoppedRed(){
+        return rstopped;
+    }
+    public int getStoppedGreen(){
+        return gstopped;
+    }
+    public int getStoppedBlue(){
+        return bstopped;
     }
 
 }
