@@ -2,6 +2,7 @@ package com.example.alessia.appragni;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,14 +16,14 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class Game2Activity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener{
+public class Game2Activity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener, View.OnClickListener{
 
 
     private static final String LOGCAT = null;
     private Bitmap ragnatela_map;
     private RelativeLayout ragnatela;
     private String TAG = getClass().getSimpleName();
-    private int ragnoR=1, ragnoB=1, ragnoG=1;
+    private int ragnoR=20, ragnoB=20, ragnoG=20;
 
     int red, green, blue;// variabili dell'altra activity
 
@@ -61,6 +62,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         findViewById(R.id.ragnoR).setOnTouchListener(this);
         findViewById(R.id.ragnoG).setOnTouchListener(this);
         findViewById(R.id.ragnoB).setOnTouchListener(this);
+        findViewById(R.id.button).setOnClickListener(this);
 
     }
 
@@ -152,5 +154,13 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
 
     public void onRestoreInstantState(Bundle savedInstateState){
         super.onRestoreInstanceState(savedInstateState);
+    }
+
+    public void onClick(View view) {
+        if(ragnoR==red && ragnoB==blue && ragnoG==green){
+            Intent intent = new Intent(Game2Activity.this, VictoryActivity.class);
+            startActivity(intent);
+        }
+
     }
 }
