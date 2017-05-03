@@ -5,6 +5,20 @@ import android.content.ClipDescription;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,18 +27,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-public class Game2Activity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener{
+import java.util.ArrayList;
 
-
+public class InterfaceActivity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener{
     private static final String LOGCAT = null;
     private Bitmap ragnatela_map;
     private RelativeLayout ragnatela;
     private String TAG = getClass().getSimpleName();
     private int ragnoR=1, ragnoB=1, ragnoG=1;
-
-    int red, green, blue;// variabili dell'altra activity
 
     int g1 = Color.argb(255, 255, 240, 75);
     int g2 = Color.argb(255, 255, 190, 75);
@@ -47,11 +58,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game2);
-
-        red = (int) getIntent().getExtras().getInt("Red");
-        green = (int) getIntent().getExtras().getInt("Green");
-        blue = (int) getIntent().getExtras().getInt("Blue");
+        setContentView(R.layout.activity_main);
 
         ragnatela_map = ((BitmapDrawable)getResources().getDrawable(R.drawable.ragnatela_bitmap_04)).getBitmap();
         ragnatela = (RelativeLayout)findViewById(R.id.ragnatelaLayout);
@@ -61,6 +68,42 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         findViewById(R.id.ragnoR).setOnTouchListener(this);
         findViewById(R.id.ragnoG).setOnTouchListener(this);
         findViewById(R.id.ragnoB).setOnTouchListener(this);
+
+
+        /*findViewById(R.id.ragnatelaLayout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch(motionEvent.getAction()){
+                    case MotionEvent.ACTION_UP:
+
+                        float vRatio = (float)ragnatela.getHeight()/(float)ragnatela_map.getHeight();
+                        float hRatio = (float)ragnatela.getWidth()/ (float)ragnatela_map.getWidth();
+
+                        Log.d(TAG, "Vratio "+vRatio+" Hratio"+hRatio + " Xevent" + motionEvent.getX() + " Yevent"+ motionEvent.getY());
+
+                        Log.d(TAG,  "bitmap W"+ragnatela_map.getWidth()+"bitmap H"+ ragnatela_map.getHeight()+" Bitmap X " + (int)(motionEvent.getX()/hRatio) + " Bitmap Y" + (int)(motionEvent.getY()/vRatio));
+
+                        int color = ragnatela_map.getPixel((int)(motionEvent.getX()/hRatio), (int)(motionEvent.getY()/vRatio));
+
+                        int b = Color.blue(color);
+                        int r = Color.red(color);
+                        int a = Color.alpha(color);
+                        int g = Color.green(color);
+
+                        Log.d(TAG,  "Alpha "+a+" R="+ r +" G=" + g + " B=" + b);
+
+
+                        if(color == verde){
+                            Log.d(TAG, "cliccato verde");
+                        }else if(color == giallo){
+                            Log.d(TAG, "cliccato giallo");
+                        }
+                        break;
+
+                }
+                return false;
+            }
+        });*/
 
     }
 
