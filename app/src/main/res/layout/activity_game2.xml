@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.example.alessia.appragni.prova">
+    tools:context="com.example.alessia.appragni.Game2Activity">
 
     <TextView
         android:id="@+id/redposition"

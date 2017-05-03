@@ -3,9 +3,6 @@ package com.example.alessia.appragni;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.support.v7.app.ActionBar;
 import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.View;
@@ -15,20 +12,16 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 import android.widget.PopupMenu.OnMenuItemClickListener;
-import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -38,15 +31,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.util.Locale;
-
 @SuppressLint("NewApi")
-public class Inizio extends AppCompatActivity {
+public class Game1Activity extends AppCompatActivity {
 
     int beginXRA=9;
     int beginYRA=15;
@@ -148,7 +137,7 @@ public class Inizio extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inizio);
+        setContentView(R.layout.activity_game1);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -195,7 +184,7 @@ public class Inizio extends AppCompatActivity {
         mMainHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                Toast.makeText(Inizio.this, (String) msg.obj, Toast.LENGTH_LONG).show();
+                Toast.makeText(Game1Activity.this, (String) msg.obj, Toast.LENGTH_LONG).show();
             }
         };
 
@@ -354,7 +343,7 @@ public class Inizio extends AppCompatActivity {
             findViewById(R.id.play).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(Inizio.this, prova.class);
+                    Intent intent = new Intent(Game1Activity.this, Game2Activity.class);
                     intent.putExtra("Red", rstopped);
                     intent.putExtra("Green", gstopped);
                     intent.putExtra("Blue", bstopped);

@@ -40,9 +40,9 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".Inizio"
+            android:name=".Game1Activity"
             android:screenOrientation="sensorLandscape" />
-        <activity android:name=".prova"></activity>
+        <activity android:name=".Game2Activity"></activity>
     </application>
 
 </manifest>

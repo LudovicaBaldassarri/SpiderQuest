@@ -1,22 +1,16 @@
 package com.example.alessia.appragni;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openInizio(View view){
-        Intent intent=new Intent(this, Inizio.class);
+        Intent intent=new Intent(this, Game1Activity.class);
         startActivity(intent);
     }
 

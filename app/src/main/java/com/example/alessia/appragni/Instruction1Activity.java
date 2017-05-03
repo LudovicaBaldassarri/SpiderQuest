@@ -26,7 +26,7 @@ public class Instruction1Activity extends AppCompatActivity {
 
 
     public void openInizio(View view){
-        Intent intent=new Intent(this, Inizio.class);
+        Intent intent=new Intent(this, Game1Activity.class);
         startActivity(intent);
     }
 }
