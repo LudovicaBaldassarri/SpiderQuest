@@ -63,19 +63,19 @@
             android:layout_alignLeft="@+id/ragnoR"
             android:layout_alignStart="@+id/ragnoR" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
-            android:text="Invio"
-            android:id="@+id/button"
-            android:layout_weight="0.29"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="13dp"
-            android:layout_marginRight="15dp"
-            android:onClick="onClick"/>
-
     </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:text="Invio"
+        android:id="@+id/button"
+        android:layout_weight="0.29"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="13dp"
+        android:layout_marginRight="15dp"
+        android:onClick="onClick"/>
 
 </RelativeLayout>

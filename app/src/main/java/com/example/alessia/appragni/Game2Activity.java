@@ -16,14 +16,14 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class Game2Activity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener, View.OnClickListener{
+public class Game2Activity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener{
 
 
     private static final String LOGCAT = null;
     private Bitmap ragnatela_map;
     private RelativeLayout ragnatela;
     private String TAG = getClass().getSimpleName();
-    private int ragnoR=20, ragnoB=20, ragnoG=20;
+    private int ragnoR=15, ragnoB=15, ragnoG=15;
 
     int red, green, blue;// variabili dell'altra activity
 
@@ -42,8 +42,9 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
     int v3 = Color.argb(255, 174, 195, 85);
     int v4 = Color.argb(255, 174, 170, 85);
     int v5 = Color.argb(255, 174, 152, 85);
+    int origin = 0;
 
-    int [] nodi = { v1, b1, g1, v2, b2, g2, v3, b3, g3, v4, b4, g4, v5, b5, g5};
+    int [] nodi = { v1, b1, g1, v2, b2, g2, v3, b3, g3, v4, b4, g4, v5, b5, g5, origin};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,6 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         findViewById(R.id.ragnoR).setOnTouchListener(this);
         findViewById(R.id.ragnoG).setOnTouchListener(this);
         findViewById(R.id.ragnoB).setOnTouchListener(this);
-        findViewById(R.id.button).setOnClickListener(this);
 
     }
 
@@ -159,6 +159,9 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
     public void onClick(View view) {
         if(ragnoR==red && ragnoB==blue && ragnoG==green){
             Intent intent = new Intent(Game2Activity.this, VictoryActivity.class);
+            startActivity(intent);
+        } else if (ragnoR!=15 && ragnoB!=15 && ragnoG!=15){
+            Intent intent = new Intent(this, LooseActivity.class);
             startActivity(intent);
         }
 

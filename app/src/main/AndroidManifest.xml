@@ -42,7 +42,15 @@
         <activity
             android:name=".Game1Activity"
             android:screenOrientation="sensorLandscape" />
-        <activity android:name=".Game2Activity"></activity>
+        <activity
+            android:name=".Game2Activity"
+            android:screenOrientation="sensorLandscape" /> />
+        <activity
+            android:name="VictoryActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name="LooseActivity"
+            android:screenOrientation="sensorLandscape" />
     </application>
 
 </manifest>
