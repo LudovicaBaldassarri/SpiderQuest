@@ -73,7 +73,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="13dp"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="15dp"
+            android:onClick="onClick"/>
 
     </RelativeLayout>
 
