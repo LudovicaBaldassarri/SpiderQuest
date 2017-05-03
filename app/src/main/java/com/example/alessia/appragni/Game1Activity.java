@@ -63,7 +63,7 @@ public class Game1Activity extends AppCompatActivity {
     int yBA=0;
     long startTime;
     long waitTime;
-    float movementDuration=2.5f; //time in seconds
+    float movementDuration=1.5f; //time in seconds
     int[] exit={1,2,3,4,5};
     int[] dest = new int[3];
     int rdestp;
@@ -271,74 +271,88 @@ public class Game1Activity extends AppCompatActivity {
 
     @OnClick(R.id.play)
     void destinationCalculate(){
-        try{
 
-            JSONArray pixels_array = preparePixelsArray();
+        Thread t= new Thread(new Runnable() {
+            public void run() {
+                try{
 
-            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
+                    JSONArray pixels_array = preparePixelsArray();
 
-            for(int i=0;i<3;i++) {
-                int index = new Random().nextInt(exit.length);
-                rd = exit[index];
+                    handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
 
-                if (i == 0) {
-                    dest[i] = rd;
-                } else if (i>0) {
-                    for (int j = 0; j < 1; j++) {
-                        if ((rd == dest[0])||(rd==dest[1])) {
-                            index = new Random().nextInt(exit.length);
-                            rd = exit[index];
-                            j--;
-                        }else if(rd==0){
-                            index = new Random().nextInt(exit.length);
-                            rd = exit[index];
-                            j--;
-                        } else {
+                    for(int i=0;i<3;i++) {
+                        int index = new Random().nextInt(exit.length);
+                        rd = exit[index];
+
+                        if (i == 0) {
                             dest[i] = rd;
+                        } else if (i>0) {
+                            for (int j = 0; j < 1; j++) {
+                                if ((rd == dest[0])||(rd==dest[1])) {
+                                    index = new Random().nextInt(exit.length);
+                                    rd = exit[index];
+                                    j--;
+                                }else if(rd==0){
+                                    index = new Random().nextInt(exit.length);
+                                    rd = exit[index];
+                                    j--;
+                                } else {
+                                    dest[i] = rd;
+                                }
+                            }
+
                         }
                     }
+                    Log.d("DEST", "0 " + String.valueOf(dest[0]) + " 1 " + String.valueOf(dest[1]) + " 2 " + String.valueOf(dest[2]));
+                    rdestp = dest[0];
+                    gdestp = dest[1];
+                    bdestp = dest[2];
+
+                    coordinatesCalculate(rdestp);
+                    endXRA = endXtmp;
+                    endYRA = endYtmp;
+                    rdest = desttmp;
+
+                    coordinatesCalculate(gdestp);
+                    endXGA = endXtmp;
+                    endYGA = endYtmp;
+                    gdest = desttmp;
+
+                    coordinatesCalculate(bdestp);
+                    endXBA = endXtmp;
+                    endYBA = endYtmp;
+                    bdest = desttmp;
+
+                    distXRA = endXRA-beginXRA;
+                    distYRA = endYRA-beginYRA;
+                    distXGA = endXGA-beginXGA;
+                    distYGA = endYGA-beginYGA;
+                    distXBA = endXBA-beginXBA;
+                    distYBA = endYBA-beginYBA;
+
+
+                    rdest();
+                    gdest();
+                    bdest();
+
+                    showSpiders();
+
+                    startTest(rdest, gdest, bdest, pixels_array);
+
+                    System.out.print(rstopped);
+                    System.out.print(gstopped);
+                    System.out.print(bstopped);
+
+
+                }catch(Exception e){
 
                 }
             }
-            Log.d("DEST", "0 " + String.valueOf(dest[0]) + " 1 " + String.valueOf(dest[1]) + " 2 " + String.valueOf(dest[2]));
-            rdestp = dest[0];
-            gdestp = dest[1];
-            bdestp = dest[2];
+        });
+        t.start();
 
-            coordinatesCalculate(rdestp);
-            endXRA = endXtmp;
-            endYRA = endYtmp;
-            rdest = desttmp;
-
-            coordinatesCalculate(gdestp);
-            endXGA = endXtmp;
-            endYGA = endYtmp;
-            gdest = desttmp;
-
-            coordinatesCalculate(bdestp);
-            endXBA = endXtmp;
-            endYBA = endYtmp;
-            bdest = desttmp;
-
-            distXRA = endXRA-beginXRA;
-            distYRA = endYRA-beginYRA;
-            distXGA = endXGA-beginXGA;
-            distYGA = endYGA-beginYGA;
-            distXBA = endXBA-beginXBA;
-            distYBA = endYBA-beginYBA;
-
-
-            rdest();
-            gdest();
-            bdest();
-
-            showSpiders();
-
-            startTest(rdest, gdest, bdest, pixels_array);
-
-            System.out.print(rstopped);
-            System.out.print(gstopped);
-            System.out.print(bstopped);
+        try {
+            t.join(); // wait for thread to finish
 
             findViewById(R.id.play).postDelayed(new Runnable() {
                 @Override
@@ -351,11 +365,9 @@ public class Game1Activity extends AppCompatActivity {
                 }
             },1000);
 
-
-        }catch(Exception e){
-
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
         }
-
     }
 
     private void coordinatesCalculate(int destp) {
@@ -390,7 +402,7 @@ public class Game1Activity extends AppCompatActivity {
 
     private void startTest(int rdest, int gdest, int bdest, JSONArray pixels_array){
         try{
-            Thread.sleep(100);
+            Thread.sleep(speed/2);
             int rfirst = rdest;
             int gfirst = gdest;
             int bfirst = bdest;
@@ -746,98 +758,6 @@ public class Game1Activity extends AppCompatActivity {
                 handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
                 Thread.sleep(speed);
             }
-
-            /*while (!stop) {
-                ((JSONObject) pixels_array.get(current)).put("r", 255);
-                ((JSONObject) pixels_array.get(current)).put("g", 0);
-                ((JSONObject) pixels_array.get(current)).put("b", 0);
-                if(current!=first) {
-                    if (isInNode(previous)){
-                        ((JSONObject) pixels_array.get(previous)).put("r", 0);
-                        ((JSONObject) pixels_array.get(previous)).put("g", 0);
-                        ((JSONObject) pixels_array.get(previous)).put("b", 0);
-                    } else {
-                        ((JSONObject) pixels_array.get(previous)).put("r", 255);
-                        ((JSONObject) pixels_array.get(previous)).put("g", 255);
-                        ((JSONObject) pixels_array.get(previous)).put("b", 255);
-                    }
-                }
-                previous = current;
-                if (isInNode(current) && !justTurned) {
-                    index = indexGenerator.nextInt(nodes[node].length);
-                    next = nodes[node][index];
-                    if(next != current){
-                        direction = directionGenerator.nextBoolean();
-                    }
-                    justTurned = true;
-                    counter++;
-                    stop = (stopGenerator.nextInt(100) < (counter*10));
-                } else {
-                    if(direction){
-                        switch(current){
-                            case 46: next = 6;
-                                break;
-                            case 108: next = 129;
-                                break;
-                            case 172: next = 66;
-                                break;
-                            case 234: next = 271;
-                                break;
-                            case 302: next = 203;
-                                break;
-                            case 360: next = 383;
-                                break;
-                            case 410: next = 331;
-                                break;
-                            case 462: next = 483;
-                                break;
-                            case 512: next = 453;
-                                break;
-                            case 612: next = 522;
-                                break;
-                            case 790: next = 613;
-                                break;
-                            case 1071: next = 791;
-                                break;
-                            default: next = current+1;
-                                break;
-                        }
-                    } else {
-                        switch(current){
-                            case 5: next = 45;
-                                break;
-                            case 65: next = 171;
-                                break;
-                            case 128: next = 107;
-                                break;
-                            case 202: next = 301;
-                                break;
-                            case 270: next = 233;
-                                break;
-                            case 330: next = 409;
-                                break;
-                            case 382: next = 359;
-                                break;
-                            case 434: next = 511;
-                                break;
-                            case 482: next = 461;
-                                break;
-                            case 522: next = 612;
-                                break;
-                            case 613: next = 790;
-                                break;
-                            case 791: next = 1071;
-                                break;
-                            default: next = current-1;
-                                break;
-                        }
-                    }
-                    justTurned = false;
-                }
-                current = next;
-                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
-                Thread.sleep(100);
-            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -884,7 +804,7 @@ public class Game1Activity extends AppCompatActivity {
                     case R.id.hard:
                         speed = 100; break;
                     default:
-                        speed = 100; break;
+                        speed = 200; break;
                 }
 
                 return true;
@@ -951,6 +871,7 @@ public class Game1Activity extends AppCompatActivity {
             int currentG;
             int currentB;
 
+
             do{
                 //tempo attuale - tempo di partenza minore della durata totale in millisecondi
                 //Log.d("PCT", "pct= "+ pct);
@@ -993,13 +914,9 @@ public class Game1Activity extends AppCompatActivity {
 
                 thisTime=(System.currentTimeMillis()-waitTime);
 
-
             } while(thisTime<3000);
 
             moveSpiders();
-
-
-
 
 
         }catch(JSONException e){
@@ -1024,7 +941,7 @@ public class Game1Activity extends AppCompatActivity {
             int currentB;
 
             do{
-                pct=(System.currentTimeMillis()-startTime)/(movementDuration*1000);  //tempo attuale - tempo di partenza minore della durata totale in millisecondi
+                pct=(System.currentTimeMillis()-startTime)/(movementDuration*speed*10);  //tempo attuale - tempo di partenza minore della durata totale in millisecondi
                 //Log.d("PCT", "pct= "+ pct);
                 xRA=Math.round(beginXRA+pct*distXRA);
                 yRA=Math.round(beginYRA+pct*distYRA);
