@@ -11,9 +11,9 @@
 <string name="istruzioni2">Fai attenzione ai led che si illuminano:
     mostreranno il percorso del ragno del colore corrispondente.</string>
 <string name="istruzioni3">Quando i led si spengono, significa che i ragni si sono nascosti
-    in uno dei nodi. Trascina il ragno sul giusto nodo, in modo da accumulare punti.</string>
-<string name="istruzioni4">Se indovini dove i ragni sono nascosti, il gioco prosegue,
-    ma attenzione: man mano che si va avanti, i ragni si muoveranno più veleocemente lungo
-    la ragnatela.</string>
+    in uno dei nodi. Trascina il ragno sul giusto nodo e, quando hai finito invia la tua risposta.</string>
+<string name="istruzioni4">Se indovini dove i ragni sono nascosti, vinci.
+    Divertiti a provare livelli più difficili, aumentando la velocità dei ragni.</string>
 <string name="menu">Menù</string>
+    <string name="invio">Invio</string>
 </resources>

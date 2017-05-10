@@ -8,9 +8,10 @@
      <string name="istruzioni2">Pay attention to the leds which light up:
         they will show the path of their same color spider.</string>
     <string name="istruzioni3">When the leds turn off, it means that the spiders hid into
-        one of the hubs. Drag the spider on the right hub, in order to collect points.</string>
-    <string name="istruzioni4">If you guess right where the spiders are hiding, the game goes on,
-    but be careful: as it goes on, the spiders are going to move faster along the web.</string>
+        one of the hubs. Drag the spider on the right hub and, when you\'re done, submit your answer.</string>
+    <string name="istruzioni4">If you guess right where the spiders are hiding, you win.
+    Have fun trying more difficult levels, increasing the speed of the spiders.</string>
     <string name="compila">Fill the form below with the IP address of the web in order to begin to play. </string>
     <string name="inizia">Start</string>
+    <string name="invio">Send</string>
 </resources>
