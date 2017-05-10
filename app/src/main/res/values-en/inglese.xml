@@ -16,4 +16,8 @@
     <string name="invio">Send</string>
     <string name="vittoria">You Win!</string>
     <string name="sconfitta">You Lose!</string>
+    <string name="facile">Easy</string>
+    <string name="normale">Regular</string>
+    <string name="difficile">Hard</string>
+    <string name="livello">Level</string>
 </resources>

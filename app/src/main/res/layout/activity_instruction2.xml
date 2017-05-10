@@ -50,7 +50,7 @@
             android:id="@+id/layoutschema">
             <pl.droidsonroids.gif.GifImageView
                 android:layout_width="match_parent"
-                android:layout_height="209dp"
+                android:layout_height="200dp"
                 android:src="@drawable/schema"
                 android:id="@+id/imageView"
                 android:layout_alignParentTop="true"

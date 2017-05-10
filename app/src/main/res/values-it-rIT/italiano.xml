@@ -18,4 +18,8 @@
     <string name="invio">Invio</string>
     <string name="vittoria">Hai Vinto!</string>
     <string name="sconfitta">Hai Perso!</string>
+    <string name="facile">Facile</string>
+    <string name="normale">Normale</string>
+    <string name="difficile">Difficile</string>
+    <string name="livello">Livello</string>
 </resources>

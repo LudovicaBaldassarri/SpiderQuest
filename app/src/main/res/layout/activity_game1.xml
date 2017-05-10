@@ -145,7 +145,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:onClick="showPopup"
-            android:text="Impostazioni" />
+            android:text="@string/livello" />
 
         <Button
             android:id="@+id/istruzioni"

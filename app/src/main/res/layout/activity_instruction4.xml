@@ -11,18 +11,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.alessia.appragni.Instruction4Activity">
 
-   <RelativeLayout
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutlivelli"
+        >
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/livelli"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/livelli" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:layout_centerVertical="true">
+        android:id="@+id/testobottoni"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
        <RelativeLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:layout_marginTop="24dp"
            android:layout_below="@+id/layoutfinale"
-           android:layout_centerVertical="true"
-           android:layout_centerHorizontal="true"
-           android:layout_marginTop="17dp">
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentStart="true">
 
            <Button
                android:text="@string/gioca"
@@ -41,13 +60,12 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                app:srcCompat="@mipmap/indietro"
-               android:layout_marginBottom="46dp"
                android:id="@+id/indietro2"
                android:onClick="backtothirdInstruction"
                android:layout_alignParentRight="true"
                android:layout_alignParentLeft="true"
                android:layout_alignParentStart="true"
-               />
+               android:layout_alignBottom="@+id/menu_istruzioni4" />
 
            <Button
                android:text="@string/menu"
@@ -68,23 +86,23 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:id="@+id/layoutfinale"
-           android:layout_alignParentTop="true">
-
+           android:layout_alignParentTop="true"
+           android:layout_below="@+id/livelli">
            <TextView
-               android:text="@string/istruzioni4"
+               android:id="@+id/textView3"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:id="@+id/textView3"
+               android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true"
+               android:layout_centerVertical="true"
+               android:text="@string/istruzioni4"
                android:textAlignment="center"
-               android:textSize="24dp"
-               android:layout_centerHorizontal="true"
-               android:layout_centerVertical="true" />
-
+               android:textSize="24dp" />
        </android.support.v7.widget.LinearLayoutCompat>
 
-   </RelativeLayout>
 
 
+    </RelativeLayout>
 
 
 
