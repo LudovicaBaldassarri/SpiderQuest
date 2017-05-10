@@ -16,4 +16,6 @@
     Divertiti a provare livelli più difficili, aumentando la velocità dei ragni.</string>
 <string name="menu">Menù</string>
     <string name="invio">Invio</string>
+    <string name="vittoria">Hai Vinto!</string>
+    <string name="sconfitta">Hai Perso!</string>
 </resources>

@@ -14,4 +14,6 @@
     <string name="compila">Fill the form below with the IP address of the web in order to begin to play. </string>
     <string name="inizia">Start</string>
     <string name="invio">Send</string>
+    <string name="vittoria">You Win!</string>
+    <string name="sconfitta">You Lose!</string>
 </resources>
