@@ -11,11 +11,50 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.alessia.appragni.VictoryActivity">
 
-    <TextView
-        android:id="@+id/testo"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/vittoria" />
+        android:id="@+id/vittoriacontainer"
+        >
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/vittoria"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/vittoria" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="@string/gioca"
+            android:layout_width="192dp"
+            android:layout_height="48dp"
+            android:id="@+id/gioca_main"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:onClick="openInizio"
+            />
+
+        <Button
+            android:text="@string/menu"
+            android:layout_width="192dp"
+            android:layout_height="48dp"
+            android:id="@+id/istruzioni"
+            android:onClick="backtoMenu"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </RelativeLayout>
