@@ -21,7 +21,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
 
     private static final String LOGCAT = null;
     private Bitmap ragnatela_map;
-    private RelativeLayout ragnatela;
+    private RelativeLayout ragnatela, ragnatela_drop;
     private String TAG = getClass().getSimpleName();
     private int ragnoR=15, ragnoB=15, ragnoG=15;
 
@@ -57,6 +57,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
 
         ragnatela_map = ((BitmapDrawable)getResources().getDrawable(R.drawable.ragnatela_bitmap_04)).getBitmap();
         ragnatela = (RelativeLayout)findViewById(R.id.ragnatelaLayout);
+        ragnatela_drop = (RelativeLayout) findViewById(R.id.dropLayout) ;
 
         findViewById(R.id.ragnatelaLayout).setOnDragListener(this);
         findViewById(R.id.ragnoR).setOnTouchListener(this);
@@ -74,8 +75,10 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
+                ragnatela_drop.setVisibility(View.VISIBLE);
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
+                ragnatela_drop.setVisibility(View.INVISIBLE);
                 break;
             case DragEvent.ACTION_DROP:
 
