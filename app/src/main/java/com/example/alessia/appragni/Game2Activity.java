@@ -2,6 +2,7 @@ package com.example.alessia.appragni;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Game2Activity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener{
 
@@ -166,6 +168,13 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         } else if (ragnoR!=15 && ragnoB!=15 && ragnoG!=15){
             Intent intent = new Intent(this, LooseActivity.class);
             startActivity(intent);
+        }else{
+            Context context = getApplicationContext();
+            CharSequence text = "@string/finisci";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
 
     }
