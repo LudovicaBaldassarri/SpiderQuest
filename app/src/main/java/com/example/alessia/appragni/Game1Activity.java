@@ -124,6 +124,11 @@ public class Game1Activity extends AppCompatActivity {
     @BindView(R.id.play)
     Button destinationCalculate;
 
+    @BindView(R.id.settings)
+    Button b;
+
+    PopupMenu popup;
+
 
     private TextWatcher myIpTextWatcher;
     private JSONArray pixels_array;
@@ -146,6 +151,40 @@ public class Game1Activity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
 
         destinationCalculate.setEnabled(false);
+
+        popup = new PopupMenu(Game1Activity.this, b);
+        popup.getMenuInflater().inflate(R.menu.activity_difficolta, popup.getMenu());
+
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.easy:
+                                speed = 400;
+                                menuItem.setChecked(true);
+                                break;
+                            case R.id.normal:
+                                speed = 200;
+                                menuItem.setChecked(true);
+                                break;
+                            case R.id.hard:
+                                speed = 100;
+                                menuItem.setChecked(true);
+                                break;
+                            default:
+                                speed = 200;
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
+
         myIpTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -790,29 +829,34 @@ public class Game1Activity extends AppCompatActivity {
     }
 
 
-    public void showPopup(View v) {
+   /* public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
+        popup.getMenuInflater().inflate(R.menu.activity_difficolta, popup.getMenu());
         popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.easy:
-                        speed = 400; break;
+                        speed = 400;
+                        menuItem.setChecked(true);
+                        break;
                     case R.id.normal:
-                        speed = 200; break;
+                        speed = 200;
+                        menuItem.setChecked(true);
+                        break;
                     case R.id.hard:
-                        speed = 100; break;
+                        speed = 100;
+                        menuItem.setChecked(true);
+                        break;
                     default:
-                        speed = 200; break;
+                        speed = 200;
+                        break;
                 }
-
                 return true;
             }
         });
-        inflater.inflate(R.menu.activity_inizio, popup.getMenu());
         popup.show();
-    }
+    }*/
 
     void turnOnLed(String spiderColor, int x, int y) throws JSONException{
         if(x<0 || y<0 || x>31 || y>31)return;
