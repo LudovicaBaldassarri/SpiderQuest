@@ -170,7 +170,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
             startActivity(intent);
         }else{
             Context context = getApplicationContext();
-            CharSequence text = "@string/finisci";
+            CharSequence text = getString(R.string.finisci);
             int duration = Toast.LENGTH_SHORT;
 
             Toast toast = Toast.makeText(context, text, duration);
