@@ -77,13 +77,13 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
-                ragnatela_drop.setVisibility(View.VISIBLE);
+                //ragnatela_drop.setVisibility(View.VISIBLE);
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
-                ragnatela_drop.setVisibility(View.INVISIBLE);
+                //ragnatela_drop.setVisibility(View.INVISIBLE);
                 break;
             case DragEvent.ACTION_DROP:
-                ragnatela_drop.setVisibility(View.INVISIBLE);
+                //ragnatela_drop.setVisibility(View.INVISIBLE);
 
                 float vRatio = (float) ragnatela.getHeight() / (float) ragnatela_map.getHeight();
                 float hRatio = (float) ragnatela.getWidth() / (float) ragnatela_map.getWidth();
