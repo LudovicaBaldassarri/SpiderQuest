@@ -20,4 +20,5 @@
     <string name="normale">Regular</string>
     <string name="difficile">Hard</string>
     <string name="livello">Level</string>
+    <string name="finisci">Set the spiders!</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.alessia.appragni;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -15,13 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Game2Activity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener{
 
 
     private static final String LOGCAT = null;
     private Bitmap ragnatela_map;
-    private RelativeLayout ragnatela;
+    private RelativeLayout ragnatela, ragnatela_drop;
     private String TAG = getClass().getSimpleName();
     private int ragnoR=15, ragnoB=15, ragnoG=15;
 
@@ -63,6 +65,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
 
         ragnatela_map = ((BitmapDrawable)getResources().getDrawable(R.drawable.ragnatela_bitmap_04)).getBitmap();
         ragnatela = (RelativeLayout)findViewById(R.id.ragnatelaLayout);
+        ragnatela_drop = (RelativeLayout) findViewById(R.id.dropLayout) ;
 
         findViewById(R.id.ragnatelaLayout).setOnDragListener(this);
         findViewById(R.id.ragnoR).setOnTouchListener(this);
@@ -80,10 +83,13 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
+                //ragnatela_drop.setVisibility(View.VISIBLE);
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
+                //ragnatela_drop.setVisibility(View.INVISIBLE);
                 break;
             case DragEvent.ACTION_DROP:
+                //ragnatela_drop.setVisibility(View.INVISIBLE);
 
                 float vRatio = (float) ragnatela.getHeight() / (float) ragnatela_map.getHeight();
                 float hRatio = (float) ragnatela.getWidth() / (float) ragnatela_map.getWidth();
@@ -171,6 +177,13 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         } else if (ragnoR!=15 && ragnoB!=15 && ragnoG!=15){
             Intent intent = new Intent(this, LooseActivity.class);
             startActivity(intent);
+        }else{
+            Context context = getApplicationContext();
+            CharSequence text = getString(R.string.finisci);
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
 
     }

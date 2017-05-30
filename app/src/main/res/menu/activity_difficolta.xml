@@ -2,13 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item android:id="@+id/easy"
-            android:title="@string/facile" >
+            android:title="@string/facile"
+            android:checked= "false">
         </item>
         <item android:id="@+id/normal"
-            android:title="@string/normale">
+            android:title="@string/normale"
+            android:checked= "true">
         </item>
         <item android:id="@+id/hard"
-            android:title="@string/difficile">
+            android:title="@string/difficile"
+            android:checked= "false">
         </item>
     </group>
 </menu>
