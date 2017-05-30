@@ -25,6 +25,9 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
     private String TAG = getClass().getSimpleName();
     private int ragnoR=15, ragnoB=15, ragnoG=15;
 
+    private String host_url;
+    private int host_port;
+
     int red, green, blue;// variabili dell'altra activity
 
     int g1 = Color.argb(255, 255, 240, 75);
@@ -54,6 +57,9 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         red = (int) getIntent().getExtras().getInt("Red");
         green = (int) getIntent().getExtras().getInt("Green");
         blue = (int) getIntent().getExtras().getInt("Blue");
+        host_url = getIntent().getExtras().getString("hostUrl");
+        host_port = getIntent().getExtras().getInt("hostPort");
+
 
         ragnatela_map = ((BitmapDrawable)getResources().getDrawable(R.drawable.ragnatela_bitmap_04)).getBitmap();
         ragnatela = (RelativeLayout)findViewById(R.id.ragnatelaLayout);
@@ -159,6 +165,8 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
     public void onClick(View view) {
         if(ragnoR==red && ragnoB==blue && ragnoG==green){
             Intent intent = new Intent(Game2Activity.this, VictoryActivity.class);
+            intent.putExtra("hostUrl", host_url);
+            intent.putExtra("hostPort", host_port);
             startActivity(intent);
         } else if (ragnoR!=15 && ragnoB!=15 && ragnoG!=15){
             Intent intent = new Intent(this, LooseActivity.class);

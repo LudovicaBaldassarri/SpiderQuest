@@ -361,6 +361,8 @@ public class Game1Activity extends AppCompatActivity {
                     intent.putExtra("Red", rstopped);
                     intent.putExtra("Green", gstopped);
                     intent.putExtra("Blue", bstopped);
+                    intent.putExtra("hostUrl", host_url);
+                    intent.putExtra("hostPort", host_port);
                     startActivity(intent);
                 }
             },1000);
