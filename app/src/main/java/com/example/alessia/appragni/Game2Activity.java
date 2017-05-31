@@ -65,7 +65,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
 
         ragnatela_map = ((BitmapDrawable)getResources().getDrawable(R.drawable.ragnatela_bitmap_04)).getBitmap();
         ragnatela = (RelativeLayout)findViewById(R.id.ragnatelaLayout);
-        ragnatela_drop = (RelativeLayout) findViewById(R.id.dropLayout) ;
+        //ragnatela_drop = (RelativeLayout) findViewById(R.id.dropLayout) ;
 
         findViewById(R.id.ragnatelaLayout).setOnDragListener(this);
         findViewById(R.id.ragnoR).setOnTouchListener(this);

@@ -50,7 +50,7 @@
             android:tag="ragnoB"
             android:src="@drawable/ragno_b"
             android:layout_marginTop="25dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
@@ -61,7 +61,7 @@
             android:tag="ragnoR"
             android:src="@drawable/ragno_r"
             android:layout_marginTop="25dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_below="@+id/ragnoB"
             android:layout_alignLeft="@+id/ragnoB"
             android:layout_alignStart="@+id/ragnoB" />
@@ -74,7 +74,7 @@
             android:tag="ragnoG"
             android:src="@drawable/ragno_g"
             android:layout_marginTop="25dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_below="@+id/ragnoR"
             android:layout_alignLeft="@+id/ragnoR"
             android:layout_alignStart="@+id/ragnoR" />

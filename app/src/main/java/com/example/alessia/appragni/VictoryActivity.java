@@ -43,6 +43,9 @@ public class VictoryActivity extends AppCompatActivity {
     int yBA=0;
     long waitTime;
 
+    private Handler handler = new Handler();
+    private Runnable runnable;
+
 
     Unbinder unbinder;
 
@@ -61,6 +64,7 @@ public class VictoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_victory);
 
+        // mi prendo l'indirizzo IP inserito all'inizio di game1activity per la connessione e tutte le funzioni annesse
         host_url = getIntent().getExtras().getString("hostUrl");
         host_port = getIntent().getExtras().getInt("hostPort");
 
@@ -112,12 +116,16 @@ public class VictoryActivity extends AppCompatActivity {
 
 
     public void backtoMenu (View view) throws JSONException{
+        //per fermare l'handler altrimenti i ragnetti continuerebbero a ballare all'infinito
+        handler.removeCallbacks(runnable);
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
     public void openInizio(View view) throws JSONException{
+        //per fermare l'handler altrimenti i ragnetti continuerebbero a ballare all'infinito
+        handler.removeCallbacks(runnable);
 
         Intent intent=new Intent(this, Game1Activity.class);
         startActivity(intent);
@@ -184,6 +192,12 @@ public class VictoryActivity extends AppCompatActivity {
         showSpiders();
     }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+        spegniTutto();
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -210,12 +224,17 @@ public class VictoryActivity extends AppCompatActivity {
         return y*32+x;
     }
 
-    void spegniTutto() throws JSONException{
-        for (int i = 0; i < pixels_array.length(); i++) {
-            ((JSONObject) pixels_array.get(i)).put("r", 0);
-            ((JSONObject) pixels_array.get(i)).put("g", 0);
-            ((JSONObject) pixels_array.get(i)).put("b", 0);
-        }
+    void spegniTutto() {
+        try{
+            for (int i = 0; i < pixels_array.length(); i++) {
+                ((JSONObject) pixels_array.get(i)).put("r", 0);
+                ((JSONObject) pixels_array.get(i)).put("g", 0);
+                ((JSONObject) pixels_array.get(i)).put("b", 0);
+            }
+        } catch(JSONException e){
+
+    }
+
     }
 
     void turnOnLed(String spiderColor, int x, int y) throws JSONException{
@@ -300,8 +319,6 @@ public class VictoryActivity extends AppCompatActivity {
     void showSpiders(){
 
 
-       // Thread t= new Thread(new Runnable() {
-          //  public void run() {
                 long thisTime;
                 int lastR=-1;
                 int lastG=-1;
@@ -353,8 +370,8 @@ public class VictoryActivity extends AppCompatActivity {
                     lastB=currentB;
                 }
 
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+            // Lancio tramite handler le due funzioni in modo che luppino ogni 200 millisecondi
+            handler.postDelayed(runnable = new Runnable() {
                 @Override
                 public void run() {
                     showSpidersUp();
@@ -367,9 +384,7 @@ public class VictoryActivity extends AppCompatActivity {
         }catch(JSONException e){
 
         }
-    /*}
-    });
-            t.start();*/
+
 
     }
 
@@ -428,8 +443,8 @@ public class VictoryActivity extends AppCompatActivity {
 
 
 
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+
+            handler.postDelayed(runnable = new Runnable() {
                 @Override
                 public void run() {
                     showSpiders();
