@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.concurrent.ThreadFactory;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -189,7 +190,13 @@ public class VictoryActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        showSpiders();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                showSpiders();
+            }
+        });
+        t.start();
     }
 
     @Override
