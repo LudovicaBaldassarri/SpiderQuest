@@ -31,11 +31,11 @@ import butterknife.Unbinder;
 public class VictoryActivity extends AppCompatActivity {
 
     int beginXRA=9;
-    int beginYRA=15;
+    int beginYRA=10;
     int beginXGA=15;
     int beginYGA=20;
     int beginXBA=21;
-    int beginYBA=15;
+    int beginYBA=10;
     int xRA=0;
     int yRA=0;
     int xGA=0;

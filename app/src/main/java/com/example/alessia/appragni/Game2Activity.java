@@ -176,6 +176,8 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
             startActivity(intent);
         } else if (ragnoR!=15 && ragnoB!=15 && ragnoG!=15){
             Intent intent = new Intent(this, LooseActivity.class);
+            intent.putExtra("hostUrl", host_url);
+            intent.putExtra("hostPort", host_port);
             startActivity(intent);
         }else{
             Context context = getApplicationContext();
