@@ -13,12 +13,12 @@
     Have fun trying more difficult levels, increasing the speed of the spiders.</string>
     <string name="compila">Fill the form below with the IP address of the web in order to begin to play. </string>
     <string name="inizia">Start</string>
-    <string name="invio">Send</string>
+    <string name="invio">Submit</string>
     <string name="vittoria">You Win!</string>
     <string name="sconfitta">You Lose!</string>
     <string name="facile">Easy</string>
     <string name="normale">Regular</string>
     <string name="difficile">Hard</string>
-    <string name="livello">Level</string>
+    <string name="livello">Difficulty</string>
     <string name="finisci">Set the spiders!</string>
 </resources>
