@@ -78,29 +78,29 @@ public class Game1Activity extends AppCompatActivity {
     int endYtmp;
     int desttmp;
 
-    int[] nodeA_a = {5,46,522};
-    int[] nodeA_b = {15,36,790};
-    int[] nodeA_c = {25, 1071};
+    static int[] nodeA_a = {5,46,522};
+    static int[] nodeA_b = {15,36,790};
+    static int[] nodeA_c = {25, 1071};
 
-    int[] nodeB_a = {65,172,543};
-    int[] nodeB_b = {86,150,651};
-    int[] nodeB_c = {108,128,843};
+    static int[] nodeB_a = {65,172,543};
+    static int[] nodeB_b = {86,150,651};
+    static int[] nodeB_c = {108,128,843};
 
-    int[] nodeC_a = {202,302,558};
-    int[] nodeC_b = {218,285,685};
-    int[] nodeC_c = {234,270,904};
+    static int[] nodeC_a = {202,302,558};
+    static int[] nodeC_b = {218,285,685};
+    static int[] nodeC_c = {234,270,904};
 
-    int[] nodeD_a = {330,410,577};
-    int[] nodeD_b = {345,395,728};
-    int[] nodeD_c = {360,382,975};
+    static int[] nodeD_a = {330,410,577};
+    static int[] nodeD_b = {345,395,728};
+    static int[] nodeD_c = {360,382,975};
 
-    int[] nodeE_a = {434,512,598};
-    int[] nodeE_b = {446,498,765};
-    int[] nodeE_c = {462,482,1032};
+    static int[] nodeE_a = {434,512,598};
+    static int[] nodeE_b = {446,498,765};
+    static int[] nodeE_c = {462,482,1032};
 
-    int[][] nodes = {nodeA_a,nodeA_b,nodeA_c,nodeB_a,nodeB_b,nodeB_c,nodeC_a,nodeC_b,nodeC_c,nodeD_a,nodeD_b,nodeD_c,nodeE_a,nodeE_b,nodeE_c};
+    static int[][] nodes = {nodeA_a,nodeA_b,nodeA_c,nodeB_a,nodeB_b,nodeB_c,nodeC_a,nodeC_b,nodeC_c,nodeD_a,nodeD_b,nodeD_c,nodeE_a,nodeE_b,nodeE_c};
 
-    int node; //index
+    static int node; //index
 
     int rstopped;
     int gstopped;
@@ -110,7 +110,7 @@ public class Game1Activity extends AppCompatActivity {
 
     Unbinder unbinder;
 
-    private String host_url = "192.168.1.32";
+    private String host_url = "192.168.2.3";
     private int host_port = 8080;
 
 
@@ -132,6 +132,7 @@ public class Game1Activity extends AppCompatActivity {
 
     private TextWatcher myIpTextWatcher;
     private JSONArray pixels_array;
+    private JSONArray pixels_array_LED;
 
     private Handler mNetworkHandler, mMainHandler;
 
@@ -218,8 +219,6 @@ public class Game1Activity extends AppCompatActivity {
 
         hostPort.addTextChangedListener(myIpTextWatcher);
 
-        pixels_array = preparePixelsArray();
-
         mMainHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -228,6 +227,17 @@ public class Game1Activity extends AppCompatActivity {
         };
 
         startHandlerThread();
+        handleNetworkRequest(NetworkThread.SET_SERVER_DATA, host_url, host_port ,0);
+        pixels_array = preparePixelsArray();
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                showRagnatela();
+            }
+        });
+        t.start();
+
     }
 
     public void startHandlerThread() {
@@ -286,6 +296,30 @@ public class Game1Activity extends AppCompatActivity {
             return false;
         }
 
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+    }
+
+    private void showRagnatela() {
+
+        try{
+
+            pixels_array_LED = preparePixelsArray();
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
+
+            for (int i = 0; i < pixels_array.length(); i++) {
+                ((JSONObject) pixels_array.get(i)).put("r", 0);
+                ((JSONObject) pixels_array.get(i)).put("g", 0);
+                ((JSONObject) pixels_array.get(i)).put("b", 0);
+            }
+            handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+            pixels_array = preparePixelsArray();
+        } catch(JSONException e){
+
+        }
     }
 
     @Override
@@ -804,7 +838,7 @@ public class Game1Activity extends AppCompatActivity {
         }
     }
 
-    private boolean isInNode(int current){
+    private static boolean isInNode(int current){
         int tmp;
         for (int i = 0; i < nodes.length; i++) {
             for (int j = 0; j < nodes[i].length; j++) {
@@ -1060,7 +1094,7 @@ public class Game1Activity extends AppCompatActivity {
         msg.sendToTarget();
     }
 
-    JSONArray preparePixelsArray() {
+    static JSONArray preparePixelsArray() {
         JSONArray pixels_array = new JSONArray();
         JSONObject tmp;
         try {
