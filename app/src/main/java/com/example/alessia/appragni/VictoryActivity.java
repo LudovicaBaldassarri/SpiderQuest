@@ -190,13 +190,20 @@ public class VictoryActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        Thread t = new Thread(new Runnable() {
+        Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
                 showSpiders();
             }
         });
-        t.start();
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                showLeds();
+            }
+        });
+        t1.start();
+        t2.start();
     }
 
     @Override
@@ -464,6 +471,24 @@ public class VictoryActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void showLeds() {
+        try {
+            JSONArray pixels_array = preparePixelsArray();
+
+            while(true){
+                for (int i = 0; i < pixels_array.length(); i++) {
+                    ((JSONObject) pixels_array.get(i)).put("r", (int) (Math.random() * 255.0f));
+                    ((JSONObject) pixels_array.get(i)).put("g", (int) (Math.random() * 255.0f));
+                    ((JSONObject) pixels_array.get(i)).put("b", (int) (Math.random() * 255.0f));
+                }
+                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0 ,0);
+                Thread.sleep(500);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     JSONArray preparePixelsArray() {
