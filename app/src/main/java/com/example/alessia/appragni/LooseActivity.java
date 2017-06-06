@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
@@ -14,13 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-import java.util.concurrent.ThreadFactory;
-
-import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -58,14 +50,17 @@ public class LooseActivity extends AppCompatActivity {
     float movementDuration=1.5f;
     int speed = 100;
 
+    private Handler handler = new Handler();
+    private Runnable runnable;
 
     Unbinder unbinder;
 
     private String host_url;
     private int host_port;
 
-    private TextWatcher myIpTextWatcher;
+    //private TextWatcher myIpTextWatcher;
     private JSONArray pixels_array;
+    private JSONArray pixels_array_LED;
 
     private Handler mNetworkHandler, mMainHandler;
 
@@ -82,7 +77,7 @@ public class LooseActivity extends AppCompatActivity {
 
         unbinder = ButterKnife.bind(this);
 
-        myIpTextWatcher = new TextWatcher() {
+        /*myIpTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -107,7 +102,7 @@ public class LooseActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
 
-        };
+        };*/
 
 
 
@@ -121,14 +116,21 @@ public class LooseActivity extends AppCompatActivity {
         startHandlerThread();
         handleNetworkRequest(NetworkThread.SET_SERVER_DATA, host_url, host_port ,0);
         pixels_array = preparePixelsArray();
+        pixels_array_LED = preparePixelsArray();
     }
 
-    public void backtoMenu (View view){
+    public void backtoMenu (View view) throws JSONException{
+        //per fermare l'handler altrimenti i ragnetti continuerebbero a ballare all'infinito
+        handler.removeCallbacks(runnable);
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    public void openInizio(View view){
+    public void openInizio(View view) throws JSONException{
+        //per fermare l'handler altrimenti i ragnetti continuerebbero a ballare all'infinito
+        handler.removeCallbacks(runnable);
+
         Intent intent=new Intent(this, Game1Activity.class);
         startActivity(intent);
     }
@@ -149,7 +151,7 @@ public class LooseActivity extends AppCompatActivity {
         msg.sendToTarget();
     }
 
-    private boolean checkCorrectIp() {
+    /*private boolean checkCorrectIp() {
 
 
         if (validIP(host_url) && host_port >= 0 & host_port <= 65535) {
@@ -185,31 +187,31 @@ public class LooseActivity extends AppCompatActivity {
             return false;
         }
 
-    }
+    }*/
 
     @Override
     protected void onStart(){
         super.onStart();
-        Thread t1 = new Thread(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 showSpiders();
             }
         });
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                showLeds();
-            }
-        });
-        t1.start();
-        t2.start();
+        t.start();
     }
 
     @Override
     protected void onStop(){
         super.onStop();
-        spegniTutto();
+        spegniSchermo();
+        try{
+            pixels_array_LED = Game1Activity.preparePixelsArray();
+            handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
+        }catch (Exception e){
+
+        }
     }
 
 
@@ -238,7 +240,7 @@ public class LooseActivity extends AppCompatActivity {
         return y*32+x;
     }
 
-    void spegniTutto() {
+    void spegniSchermo() {
         try{
             for (int i = 0; i < pixels_array.length(); i++) {
                 ((JSONObject) pixels_array.get(i)).put("r", 0);
@@ -295,7 +297,7 @@ public class LooseActivity extends AppCompatActivity {
 
     }
 
-    void drawSpiderUp(String spiderColor, int x, int y) throws JSONException{
+    /*void drawSpiderUp(String spiderColor, int x, int y) throws JSONException{
         turnOnLed(spiderColor, x,y);
         turnOnLed(spiderColor, x+1,y+1);
         turnOnLed(spiderColor, x+2,y+2);
@@ -328,66 +330,76 @@ public class LooseActivity extends AppCompatActivity {
         turnOnLed(spiderColor, x+3,y+1);
         turnOnLed(spiderColor, x,y+2);
 
-    }
+    }*/
 
     void showSpiders(){
+        waitTime=System.currentTimeMillis();
+        long thisTime;
+        int lastR=-1;
+        int lastG=-1;
+        int lastB=-1;
+        int currentR;
+        int currentG;
+        int currentB;
+
+
         try{
 
-            waitTime=System.currentTimeMillis();
-            long thisTime;
-            int lastR=-1;
-            int lastG=-1;
-            int lastB=-1;
-            int currentR;
-            int currentG;
-            int currentB;
 
+            do {
 
-            do{
                 //tempo attuale - tempo di partenza minore della durata totale in millisecondi
                 //Log.d("PCT", "pct= "+ pct);
-                xRA=Math.round(beginXRA);
-                yRA=Math.round(beginYRA);
-                xGA=Math.round(beginXGA);
-                yGA=Math.round(beginYGA);
-                xBA=Math.round(beginXBA);
-                yBA=Math.round(beginYBA);
-                currentR=computeIndex(xRA,yRA);
-                currentG=computeIndex(xGA,yGA);
-                currentB=computeIndex(xBA,yBA);
+                xRA = Math.round(beginXRA);
+                yRA = Math.round(beginYRA);
+                xGA = Math.round(beginXGA);
+                yGA = Math.round(beginYGA);
+                xBA = Math.round(beginXBA);
+                yBA = Math.round(beginYBA);
+                currentR = computeIndex(xRA, yRA);
+                currentG = computeIndex(xGA, yGA);
+                currentB = computeIndex(xBA, yBA);
 
-                if(lastR!=currentR){
-                    spegniTutto();
+                if (lastR != currentR) {
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
-                    lastR=currentR;
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+                    lastR = currentR;
                 }
 
-                if(lastG!=currentG){
-                    spegniTutto();
+                if (lastG != currentG) {
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
-                    lastG=currentG;
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+                    lastG = currentG;
                 }
 
-                if(lastB!=currentB){
-                    spegniTutto();
+                if (lastB != currentB) {
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
-                    lastB=currentB;
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+                    lastB = currentB;
                 }
 
-                thisTime=(System.currentTimeMillis()-waitTime);
+                thisTime = System.currentTimeMillis() - waitTime;
 
-            } while(thisTime<200);
+            }while(thisTime<200);
 
-            moveSpiders();
+
+            handler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    moveSpiders();
+                }
+            }, 200);
+
+
 
 
         }catch(JSONException e){
@@ -400,68 +412,74 @@ public class LooseActivity extends AppCompatActivity {
 
 
     void moveSpiders(){
+
+        startTime=System.currentTimeMillis();
+        float pct;
+        int lastR=-1;
+        int lastG=-1;
+        int lastB=-1;
+        int currentR;
+        int currentG;
+        int currentB;
+
+        distXRA = endXRA-beginXRA;
+        distYRA = endYRA-beginYRA;
+        distXGA = endXGA-beginXGA;
+        distYGA = endYGA-beginYGA;
+        distXBA = endXBA-beginXBA;
+        distYBA = endYBA-beginYBA;
+
         try{
 
-            startTime=System.currentTimeMillis();
-            float pct;
-            int lastR=-1;
-            int lastG=-1;
-            int lastB=-1;
-            int currentR;
-            int currentG;
-            int currentB;
+            do {
 
-            distXRA = endXRA-beginXRA;
-            distYRA = endYRA-beginYRA;
-            distXGA = endXGA-beginXGA;
-            distYGA = endYGA-beginYGA;
-            distXBA = endXBA-beginXBA;
-            distYBA = endYBA-beginYBA;
-
-            do{
-                pct=(System.currentTimeMillis()-startTime)/(movementDuration*speed*10);  //tempo attuale - tempo di partenza minore della durata totale in millisecondi
+                pct = (System.currentTimeMillis() - startTime) / (movementDuration * speed * 10);  //tempo attuale - tempo di partenza minore della durata totale in millisecondi
                 //Log.d("PCT", "pct= "+ pct);
-                xRA=Math.round(beginXRA+pct*distXRA);
-                yRA=Math.round(beginYRA+pct*distYRA);
-                xGA=Math.round(beginXGA+pct*distXGA);
-                yGA=Math.round(beginYGA+pct*distYGA);
-                xBA=Math.round(beginXBA+pct*distXBA);
-                yBA=Math.round(beginYBA+pct*distYBA);
-                currentR=computeIndex(xRA,yRA);
-                currentG=computeIndex(xGA,yGA);
-                currentB=computeIndex(xBA,yBA);
+                xRA = Math.round(beginXRA + pct * distXRA);
+                yRA = Math.round(beginYRA + pct * distYRA);
+                xGA = Math.round(beginXGA + pct * distXGA);
+                yGA = Math.round(beginYGA + pct * distYGA);
+                xBA = Math.round(beginXBA + pct * distXBA);
+                yBA = Math.round(beginYBA + pct * distYBA);
+                currentR = computeIndex(xRA, yRA);
+                currentG = computeIndex(xGA, yGA);
+                currentB = computeIndex(xBA, yBA);
 
-                if(lastR!=currentR){
-                    spegniTutto();
+                if (lastR != currentR) {
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
-                    lastR=currentR;
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+                    lastR = currentR;
                 }
 
-                if(lastG!=currentG){
-                    spegniTutto();
+                if (lastG != currentG) {
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
-                    lastG=currentG;
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+                    lastG = currentG;
                 }
 
-                if(lastB!=currentB){
-                    spegniTutto();
+                if (lastB != currentB) {
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
-                    lastB=currentB;
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+                    lastB = currentB;
                 }
+            }while (pct < 1.0f);
 
+            handler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    showSpiders();
+                }
+            }, 200);
 
-            } while(pct<1.0f);
-
-            showSpiders();
 
 
 
@@ -472,21 +490,27 @@ public class LooseActivity extends AppCompatActivity {
 
 
     private void showLeds() {
-        try {
-            JSONArray pixels_array = preparePixelsArray();
 
-            while(true){
-                for (int i = 0; i < pixels_array.length(); i++) {
-                    ((JSONObject) pixels_array.get(i)).put("r", (int) (Math.random() * 255.0f));
-                    ((JSONObject) pixels_array.get(i)).put("g", (int) (Math.random() * 255.0f));
-                    ((JSONObject) pixels_array.get(i)).put("b", (int) (Math.random() * 255.0f));
-                }
-                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0 ,0);
-                Thread.sleep(500);
+        try {
+
+            for (int i = 0; i < pixels_array_LED.length(); i++) {
+                ((JSONObject) pixels_array_LED.get(i)).put("r", (int) (Math.random() * 255.0f));
+                ((JSONObject) pixels_array_LED.get(i)).put("g", (int) (Math.random() * 255.0f));
+                ((JSONObject) pixels_array_LED.get(i)).put("b", (int) (Math.random() * 255.0f));
             }
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
+
+            handler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    showLeds();
+                }
+            }, 200);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 

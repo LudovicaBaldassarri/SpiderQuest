@@ -53,8 +53,9 @@ public class VictoryActivity extends AppCompatActivity {
     private String host_url;
     private int host_port;
 
-    private TextWatcher myIpTextWatcher;
+    //private TextWatcher myIpTextWatcher;
     private JSONArray pixels_array;
+    private JSONArray pixels_array_LED;
 
     private Handler mNetworkHandler, mMainHandler;
 
@@ -72,7 +73,7 @@ public class VictoryActivity extends AppCompatActivity {
 
         unbinder = ButterKnife.bind(this);
 
-        myIpTextWatcher = new TextWatcher() {
+        /*myIpTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -97,7 +98,7 @@ public class VictoryActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
 
-        };
+        };*/
 
 
 
@@ -111,6 +112,7 @@ public class VictoryActivity extends AppCompatActivity {
         startHandlerThread();
         handleNetworkRequest(NetworkThread.SET_SERVER_DATA, host_url, host_port ,0);
         pixels_array = preparePixelsArray();
+        pixels_array_LED = preparePixelsArray();
 
     }
 
@@ -149,7 +151,7 @@ public class VictoryActivity extends AppCompatActivity {
         msg.sendToTarget();
     }
 
-    private boolean checkCorrectIp() {
+    /*private boolean checkCorrectIp() {
 
 
         if (validIP(host_url) && host_port >= 0 & host_port <= 65535) {
@@ -185,31 +187,31 @@ public class VictoryActivity extends AppCompatActivity {
             return false;
         }
 
-    }
+    }*/
 
     @Override
     protected void onStart(){
         super.onStart();
-        Thread t1 = new Thread(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 showSpiders();
             }
         });
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                showLeds();
-            }
-        });
-        t1.start();
-        t2.start();
+        t.start();
     }
 
     @Override
     protected void onStop(){
         super.onStop();
-        spegniTutto();
+        spegniSchermo();
+        try{
+            pixels_array_LED = Game1Activity.preparePixelsArray();
+            handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
+        }catch (Exception e){
+
+        }
     }
 
 
@@ -238,7 +240,7 @@ public class VictoryActivity extends AppCompatActivity {
         return y*32+x;
     }
 
-    void spegniTutto() {
+    void spegniSchermo() {
         try{
             for (int i = 0; i < pixels_array.length(); i++) {
                 ((JSONObject) pixels_array.get(i)).put("r", 0);
@@ -333,7 +335,7 @@ public class VictoryActivity extends AppCompatActivity {
     void showSpiders(){
 
 
-                long thisTime;
+                //long thisTime;
                 int lastR=-1;
                 int lastG=-1;
                 int lastB=-1;
@@ -342,7 +344,7 @@ public class VictoryActivity extends AppCompatActivity {
                 int currentB;
         try{
 
-            waitTime=System.currentTimeMillis();
+            //waitTime=System.currentTimeMillis();
 
 
                 //tempo attuale - tempo di partenza minore della durata totale in millisecondi
@@ -358,7 +360,7 @@ public class VictoryActivity extends AppCompatActivity {
                 currentB=computeIndex(xBA,yBA);
 
                 if(lastR!=currentR){
-                    spegniTutto();
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
@@ -367,7 +369,7 @@ public class VictoryActivity extends AppCompatActivity {
                 }
 
                 if(lastG!=currentG){
-                    spegniTutto();
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
@@ -376,7 +378,7 @@ public class VictoryActivity extends AppCompatActivity {
                 }
 
                 if(lastB!=currentB){
-                    spegniTutto();
+                    spegniSchermo();
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
@@ -392,18 +394,13 @@ public class VictoryActivity extends AppCompatActivity {
                 }
             }, 200);
 
-
-
-
         }catch(JSONException e){
 
         }
-
-
     }
 
     void showSpidersUp(){
-        long thisTime;
+        //long thisTime;
         int lastR=-1;
         int lastG=-1;
         int lastB=-1;
@@ -413,7 +410,7 @@ public class VictoryActivity extends AppCompatActivity {
 
         try{
 
-            waitTime=System.currentTimeMillis();
+            //waitTime=System.currentTimeMillis();
 
 
                 //tempo attuale - tempo di partenza minore della durata totale in millisecondi
@@ -429,7 +426,7 @@ public class VictoryActivity extends AppCompatActivity {
                 currentB=computeIndex(xBA,yBA);
 
                 if(lastR!=currentR){
-                    spegniTutto();
+                    spegniSchermo();
                     drawSpiderUp("r", xRA, yRA-2);
                     drawSpiderUp("g", xGA, yGA-2);
                     drawSpiderUp("b", xBA, yBA-2);
@@ -438,7 +435,7 @@ public class VictoryActivity extends AppCompatActivity {
                 }
 
                 if(lastG!=currentG){
-                    spegniTutto();
+                    spegniSchermo();
                     drawSpiderUp("r", xRA, yRA-2);
                     drawSpiderUp("g", xGA, yGA-2);
                     drawSpiderUp("b", xBA, yBA-2);
@@ -447,16 +444,13 @@ public class VictoryActivity extends AppCompatActivity {
                 }
 
                 if(lastB!=currentB){
-                    spegniTutto();
+                    spegniSchermo();
                     drawSpiderUp("r", xRA, yRA-2);
                     drawSpiderUp("g", xGA, yGA-2);
                     drawSpiderUp("b", xBA, yBA-2);
                     handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
                     lastB=currentB;
                 }
-
-
-
 
             handler.postDelayed(runnable = new Runnable() {
                 @Override
@@ -474,21 +468,27 @@ public class VictoryActivity extends AppCompatActivity {
     }
 
     private void showLeds() {
-        try {
-            JSONArray pixels_array = preparePixelsArray();
 
-            while(true){
-                for (int i = 0; i < pixels_array.length(); i++) {
-                    ((JSONObject) pixels_array.get(i)).put("r", (int) (Math.random() * 255.0f));
-                    ((JSONObject) pixels_array.get(i)).put("g", (int) (Math.random() * 255.0f));
-                    ((JSONObject) pixels_array.get(i)).put("b", (int) (Math.random() * 255.0f));
-                }
-                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0 ,0);
-                Thread.sleep(500);
+        try {
+
+            for (int i = 0; i < pixels_array_LED.length(); i++) {
+                ((JSONObject) pixels_array_LED.get(i)).put("r", (int) (Math.random() * 255.0f));
+                ((JSONObject) pixels_array_LED.get(i)).put("g", (int) (Math.random() * 255.0f));
+                ((JSONObject) pixels_array_LED.get(i)).put("b", (int) (Math.random() * 255.0f));
             }
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
+
+            handler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    showLeds();
+                }
+            }, 200);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     JSONArray preparePixelsArray() {
