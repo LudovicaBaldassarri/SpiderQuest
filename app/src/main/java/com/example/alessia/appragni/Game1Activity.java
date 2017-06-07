@@ -78,6 +78,9 @@ public class Game1Activity extends AppCompatActivity {
     int endYtmp;
     int desttmp;
 
+    int centerLogoX=15;
+    int getCenterLogoY=15;
+
     static int[] nodeA_a = {5,46,522};
     static int[] nodeA_b = {15,36,790};
     static int[] nodeA_c = {25, 1071};
@@ -110,7 +113,7 @@ public class Game1Activity extends AppCompatActivity {
 
     Unbinder unbinder;
 
-    private String host_url = "192.168.2.3";
+    private String host_url = "192.168.0.117";
     private int host_port = 8080;
 
 
@@ -301,6 +304,27 @@ public class Game1Activity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+
+
+                    for (int i = 0; i < pixels_array.length(); i++) {
+                        ((JSONObject) pixels_array.get(i)).put("r", 0);
+                        ((JSONObject) pixels_array.get(i)).put("g", 0);
+                        ((JSONObject) pixels_array.get(i)).put("b", 0);
+                    }
+                    showLogo();
+
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+                    pixels_array = preparePixelsArray();
+                } catch(JSONException e){
+
+                }
+            }
+        });
+        t.start();
     }
 
     private void showRagnatela() {
@@ -315,6 +339,7 @@ public class Game1Activity extends AppCompatActivity {
                 ((JSONObject) pixels_array.get(i)).put("g", 0);
                 ((JSONObject) pixels_array.get(i)).put("b", 0);
             }
+
             handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
             pixels_array = preparePixelsArray();
         } catch(JSONException e){
@@ -1005,9 +1030,6 @@ public class Game1Activity extends AppCompatActivity {
 
     }
 
-
-
-
     void moveSpiders(){
         try{
 
@@ -1070,6 +1092,8 @@ public class Game1Activity extends AppCompatActivity {
         }
     }
 
+
+
     int rdest(){
         Log.d("VALUE", "rdest= "+String.valueOf(rdest));
         return rdest;
@@ -1131,6 +1155,426 @@ public class Game1Activity extends AppCompatActivity {
     }
     public int getStoppedBlue(){
         return bstopped;
+    }
+
+    void turnOnLedLogo(int x, int y) throws JSONException{
+        if(x<0 || y<0 || x>31 || y>31)return;
+        int current=computeIndex(x,y);
+        ((JSONObject) pixels_array.get(current)).put("r", 255); //utilizzo funzione computeIndex per calcolare indice di volta in volta
+    }
+
+    void showLogo(){
+        try{
+            drawLogo(centerLogoX, getCenterLogoY);
+        }catch(JSONException e){
+
+        }
+    }
+
+    void drawLogo(int x, int y) throws JSONException{
+        turnOnLedLogo(x-14,y-11);
+        turnOnLedLogo(x-14,y-10);
+        turnOnLedLogo(x-14,y-9);
+        turnOnLedLogo(x-14,y-8);
+        turnOnLedLogo(x-14,y-7);
+        turnOnLedLogo(x-14,y-4);
+        turnOnLedLogo(x-14,y-3);
+        turnOnLedLogo(x-14,y+2);
+        turnOnLedLogo(x-14,y+3);
+        turnOnLedLogo(x-14,y+4);
+        turnOnLedLogo(x-14,y+5);
+        turnOnLedLogo(x-14,y+6);
+        turnOnLedLogo(x-14,y+7);
+        turnOnLedLogo(x-14,y+8);
+        turnOnLedLogo(x-14,y+9);
+        turnOnLedLogo(x-14,y+10);
+
+        turnOnLedLogo(x-13,y-12);
+        turnOnLedLogo(x-13,y-11);
+        turnOnLedLogo(x-13,y-10);
+        turnOnLedLogo(x-13,y-9);
+        turnOnLedLogo(x-13,y-8);
+        turnOnLedLogo(x-13,y-7);
+        turnOnLedLogo(x-13,y-4);
+        turnOnLedLogo(x-13,y-3);
+        turnOnLedLogo(x-13,y+3);
+        turnOnLedLogo(x-13,y+4);
+        turnOnLedLogo(x-13,y+5);
+        turnOnLedLogo(x-13,y+6);
+        turnOnLedLogo(x-13,y+7);
+        turnOnLedLogo(x-13,y+8);
+        turnOnLedLogo(x-13,y+9);
+        turnOnLedLogo(x-13,y+10);
+        turnOnLedLogo(x-13,y+11);
+
+        turnOnLedLogo(x-12,y-12);
+        turnOnLedLogo(x-12,y-11);
+        turnOnLedLogo(x-12,y-8);
+        turnOnLedLogo(x-12,y-7);
+        turnOnLedLogo(x-12,y-6);
+        turnOnLedLogo(x-12,y-5);
+        turnOnLedLogo(x-12,y-4);
+        turnOnLedLogo(x-12,y-3);
+        turnOnLedLogo(x-12,y+2);
+        turnOnLedLogo(x-12,y+3);
+        turnOnLedLogo(x-12,y+10);
+        turnOnLedLogo(x-12,y+11);
+
+        turnOnLedLogo(x-11,y-12);
+        turnOnLedLogo(x-11,y-11);
+        turnOnLedLogo(x-11,y-8);
+        turnOnLedLogo(x-11,y-7);
+        turnOnLedLogo(x-11,y-6);
+        turnOnLedLogo(x-11,y-5);
+        turnOnLedLogo(x-11,y-4);
+        turnOnLedLogo(x-11,y+3);
+        turnOnLedLogo(x-11,y+4);
+        turnOnLedLogo(x-11,y+5);
+        turnOnLedLogo(x-11,y+6);
+        turnOnLedLogo(x-11,y+7);
+        turnOnLedLogo(x-11,y+8);
+        turnOnLedLogo(x-11,y+9);
+        turnOnLedLogo(x-11,y+10);
+        turnOnLedLogo(x-11,y+11);
+        turnOnLedLogo(x-11,y+12);
+        turnOnLedLogo(x-11,y+13);
+
+        turnOnLedLogo(x-10,y+4);
+        turnOnLedLogo(x-10,y+5);
+        turnOnLedLogo(x-10,y+6);
+        turnOnLedLogo(x-10,y+7);
+        turnOnLedLogo(x-10,y+8);
+        turnOnLedLogo(x-10,y+9);
+        turnOnLedLogo(x-10,y+10);
+        turnOnLedLogo(x-10,y+11);
+        turnOnLedLogo(x-10,y+12);
+        turnOnLedLogo(x-10,y+13);
+
+        turnOnLedLogo(x-9,y-12);
+        turnOnLedLogo(x-9,y-11);
+        turnOnLedLogo(x-9,y-10);
+        turnOnLedLogo(x-9,y-9);
+        turnOnLedLogo(x-9,y-8);
+        turnOnLedLogo(x-9,y-7);
+        turnOnLedLogo(x-9,y-6);
+        turnOnLedLogo(x-9,y-5);
+        turnOnLedLogo(x-9,y-4);
+        turnOnLedLogo(x-9,y-3);
+
+        turnOnLedLogo(x-8,y-12);
+        turnOnLedLogo(x-8,y-11);
+        turnOnLedLogo(x-8,y-10);
+        turnOnLedLogo(x-8,y-9);
+        turnOnLedLogo(x-8,y-8);
+        turnOnLedLogo(x-8,y-7);
+        turnOnLedLogo(x-8,y-6);
+        turnOnLedLogo(x-8,y-5);
+        turnOnLedLogo(x-8,y-4);
+        turnOnLedLogo(x-8,y-3);
+        turnOnLedLogo(x-8,y+2);
+        turnOnLedLogo(x-8,y+3);
+        turnOnLedLogo(x-8,y+4);
+        turnOnLedLogo(x-8,y+5);
+        turnOnLedLogo(x-8,y+6);
+        turnOnLedLogo(x-8,y+7);
+        turnOnLedLogo(x-8,y+8);
+        turnOnLedLogo(x-8,y+9);
+        turnOnLedLogo(x-8,y+10);
+
+        turnOnLedLogo(x-7,y-12);
+        turnOnLedLogo(x-7,y-8);
+        turnOnLedLogo(x-7,y+2);
+        turnOnLedLogo(x-7,y+3);
+        turnOnLedLogo(x-7,y+4);
+        turnOnLedLogo(x-7,y+5);
+        turnOnLedLogo(x-7,y+6);
+        turnOnLedLogo(x-7,y+7);
+        turnOnLedLogo(x-7,y+8);
+        turnOnLedLogo(x-7,y+9);
+        turnOnLedLogo(x-7,y+10);
+        turnOnLedLogo(x-7,y+11);
+
+        turnOnLedLogo(x-6,y-12);
+        turnOnLedLogo(x-6,y-11);
+        turnOnLedLogo(x-6,y-10);
+        turnOnLedLogo(x-6,y-9);
+        turnOnLedLogo(x-6,y-8);
+        turnOnLedLogo(x-6,y+10);
+        turnOnLedLogo(x-6,y+11);
+
+        turnOnLedLogo(x-5,y+2);
+        turnOnLedLogo(x-5,y+3);
+        turnOnLedLogo(x-5,y+4);
+        turnOnLedLogo(x-5,y+5);
+        turnOnLedLogo(x-5,y+6);
+        turnOnLedLogo(x-5,y+7);
+        turnOnLedLogo(x-5,y+8);
+        turnOnLedLogo(x-5,y+9);
+        turnOnLedLogo(x-5,y+10);
+
+        turnOnLedLogo(x-4,y-12);
+        turnOnLedLogo(x-4,y-11);
+        turnOnLedLogo(x-4,y-10);
+        turnOnLedLogo(x-4,y-9);
+        turnOnLedLogo(x-4,y-8);
+        turnOnLedLogo(x-4,y-7);
+        turnOnLedLogo(x-4,y-6);
+        turnOnLedLogo(x-4,y-5);
+        turnOnLedLogo(x-4,y-4);
+        turnOnLedLogo(x-4,y-3);
+        turnOnLedLogo(x-4,y+2);
+        turnOnLedLogo(x-4,y+3);
+        turnOnLedLogo(x-4,y+4);
+        turnOnLedLogo(x-4,y+5);
+        turnOnLedLogo(x-4,y+6);
+        turnOnLedLogo(x-4,y+7);
+        turnOnLedLogo(x-4,y+8);
+        turnOnLedLogo(x-4,y+9);
+        turnOnLedLogo(x-4,y+10);
+
+        turnOnLedLogo(x-3,y-12);
+        turnOnLedLogo(x-3,y-11);
+        turnOnLedLogo(x-3,y-10);
+        turnOnLedLogo(x-3,y-9);
+        turnOnLedLogo(x-3,y-8);
+        turnOnLedLogo(x-3,y-7);
+        turnOnLedLogo(x-3,y-6);
+        turnOnLedLogo(x-3,y-5);
+        turnOnLedLogo(x-3,y-4);
+        turnOnLedLogo(x-3,y-3);
+
+        turnOnLedLogo(x-2,y+2);
+        turnOnLedLogo(x-2,y+3);
+        turnOnLedLogo(x-2,y+4);
+        turnOnLedLogo(x-2,y+5);
+        turnOnLedLogo(x-2,y+6);
+        turnOnLedLogo(x-2,y+7);
+        turnOnLedLogo(x-2,y+8);
+        turnOnLedLogo(x-2,y+9);
+        turnOnLedLogo(x-2,y+10);
+        turnOnLedLogo(x-2,y+11);
+
+
+        turnOnLedLogo(x-1,y-12);
+        turnOnLedLogo(x-1,y-11);
+        turnOnLedLogo(x-1,y-10);
+        turnOnLedLogo(x-1,y-9);
+        turnOnLedLogo(x-1,y-8);
+        turnOnLedLogo(x-1,y-7);
+        turnOnLedLogo(x-1,y-6);
+        turnOnLedLogo(x-1,y-5);
+        turnOnLedLogo(x-1,y-4);
+        turnOnLedLogo(x-1,y-3);
+        turnOnLedLogo(x-1,y+2);
+        turnOnLedLogo(x-1,y+3);
+        turnOnLedLogo(x-1,y+4);
+        turnOnLedLogo(x-1,y+5);
+        turnOnLedLogo(x-1,y+6);
+        turnOnLedLogo(x-1,y+7);
+        turnOnLedLogo(x-1,y+8);
+        turnOnLedLogo(x-1,y+9);
+        turnOnLedLogo(x-1,y+10);
+        turnOnLedLogo(x-1,y+11);
+
+        turnOnLedLogo(x,y-12);
+        turnOnLedLogo(x,y-11);
+        turnOnLedLogo(x,y-10);
+        turnOnLedLogo(x,y-9);
+        turnOnLedLogo(x,y-8);
+        turnOnLedLogo(x,y-7);
+        turnOnLedLogo(x,y-6);
+        turnOnLedLogo(x,y-5);
+        turnOnLedLogo(x,y-4);
+        turnOnLedLogo(x,y-3);
+        turnOnLedLogo(x,y+2);
+        turnOnLedLogo(x,y+3);
+        turnOnLedLogo(x,y+6);
+        turnOnLedLogo(x,y+7);
+        turnOnLedLogo(x,y+10);
+        turnOnLedLogo(x,y+11);
+
+        turnOnLedLogo(x+1,y-12);
+        turnOnLedLogo(x+1,y-11);
+        turnOnLedLogo(x+1,y-4);
+        turnOnLedLogo(x+1,y-3);
+        turnOnLedLogo(x+1,y+2);
+        turnOnLedLogo(x+1,y+3);
+        turnOnLedLogo(x+1,y+10);
+        turnOnLedLogo(x+1,y+11);
+
+        turnOnLedLogo(x+2,y-12);
+        turnOnLedLogo(x+2,y-11);
+        turnOnLedLogo(x+2,y-4);
+        turnOnLedLogo(x+2,y-3);
+
+        turnOnLedLogo(x+3,y-12);
+        turnOnLedLogo(x+3,y-11);
+        turnOnLedLogo(x+3,y-10);
+        turnOnLedLogo(x+3,y-9);
+        turnOnLedLogo(x+3,y-8);
+        turnOnLedLogo(x+3,y-7);
+        turnOnLedLogo(x+3,y-6);
+        turnOnLedLogo(x+3,y-5);
+        turnOnLedLogo(x+3,y-4);
+        turnOnLedLogo(x+3,y-3);
+        turnOnLedLogo(x+3,y+3);
+        turnOnLedLogo(x+3,y+4);
+        turnOnLedLogo(x+3,y+5);
+        turnOnLedLogo(x+3,y+6);
+        turnOnLedLogo(x+3,y+7);
+        turnOnLedLogo(x+3,y+10);
+        turnOnLedLogo(x+3,y+11);
+
+        turnOnLedLogo(x+4,y-11);
+        turnOnLedLogo(x+4,y-10);
+        turnOnLedLogo(x+4,y-9);
+        turnOnLedLogo(x+4,y-8);
+        turnOnLedLogo(x+4,y-7);
+        turnOnLedLogo(x+4,y-6);
+        turnOnLedLogo(x+4,y-5);
+        turnOnLedLogo(x+4,y-4);
+        turnOnLedLogo(x+4,y+2);
+        turnOnLedLogo(x+4,y+3);
+        turnOnLedLogo(x+4,y+4);
+        turnOnLedLogo(x+4,y+5);
+        turnOnLedLogo(x+4,y+6);
+        turnOnLedLogo(x+4,y+7);
+        turnOnLedLogo(x+4,y+10);
+        turnOnLedLogo(x+4,y+11);
+
+        turnOnLedLogo(x+5,y+2);
+        turnOnLedLogo(x+5,y+3);
+        turnOnLedLogo(x+5,y+6);
+        turnOnLedLogo(x+5,y+7);
+        turnOnLedLogo(x+5,y+8);
+        turnOnLedLogo(x+5,y+9);
+        turnOnLedLogo(x+5,y+10);
+        turnOnLedLogo(x+5,y+11);
+
+        turnOnLedLogo(x+6,y-12);
+        turnOnLedLogo(x+6,y-11);
+        turnOnLedLogo(x+6,y-10);
+        turnOnLedLogo(x+6,y-9);
+        turnOnLedLogo(x+6,y-8);
+        turnOnLedLogo(x+6,y-7);
+        turnOnLedLogo(x+6,y-6);
+        turnOnLedLogo(x+6,y-5);
+        turnOnLedLogo(x+6,y-4);
+        turnOnLedLogo(x+6,y-3);
+        turnOnLedLogo(x+6,y+2);
+        turnOnLedLogo(x+6,y+3);
+        turnOnLedLogo(x+6,y+6);
+        turnOnLedLogo(x+6,y+7);
+        turnOnLedLogo(x+6,y+8);
+        turnOnLedLogo(x+6,y+9);
+        turnOnLedLogo(x+6,y+10);
+
+        turnOnLedLogo(x+7,y-12);
+        turnOnLedLogo(x+7,y-11);
+        turnOnLedLogo(x+7,y-10);
+        turnOnLedLogo(x+7,y-9);
+        turnOnLedLogo(x+7,y-8);
+        turnOnLedLogo(x+7,y-7);
+        turnOnLedLogo(x+7,y-6);
+        turnOnLedLogo(x+7,y-5);
+        turnOnLedLogo(x+7,y-4);
+        turnOnLedLogo(x+7,y-3);
+
+        turnOnLedLogo(x+8,y-12);
+        turnOnLedLogo(x+8,y-11);
+        turnOnLedLogo(x+8,y-8);
+        turnOnLedLogo(x+8,y-7);
+        turnOnLedLogo(x+8,y-4);
+        turnOnLedLogo(x+8,y-3);
+        turnOnLedLogo(x+8,y+2);
+        turnOnLedLogo(x+8,y+3);
+
+        turnOnLedLogo(x+9,y-12);
+        turnOnLedLogo(x+9,y-11);
+        turnOnLedLogo(x+9,y-4);
+        turnOnLedLogo(x+9,y-3);
+        turnOnLedLogo(x+9,y+2);
+        turnOnLedLogo(x+9,y+3);
+
+        turnOnLedLogo(x+10,y+2);
+        turnOnLedLogo(x+10,y+3);
+        turnOnLedLogo(x+10,y+4);
+        turnOnLedLogo(x+10,y+5);
+        turnOnLedLogo(x+10,y+6);
+        turnOnLedLogo(x+10,y+7);
+        turnOnLedLogo(x+10,y+8);
+        turnOnLedLogo(x+10,y+9);
+        turnOnLedLogo(x+10,y+10);
+        turnOnLedLogo(x+10,y+11);
+        turnOnLedLogo(x+10,y+12);
+        turnOnLedLogo(x+10,y+13);
+
+        turnOnLedLogo(x+11,y-12);
+        turnOnLedLogo(x+11,y-11);
+        turnOnLedLogo(x+11,y-10);
+        turnOnLedLogo(x+11,y-9);
+        turnOnLedLogo(x+11,y-8);
+        turnOnLedLogo(x+11,y-7);
+        turnOnLedLogo(x+11,y-6);
+        turnOnLedLogo(x+11,y-5);
+        turnOnLedLogo(x+11,y-4);
+        turnOnLedLogo(x+11,y-3);
+        turnOnLedLogo(x+11,y+2);
+        turnOnLedLogo(x+11,y+3);
+        turnOnLedLogo(x+11,y+4);
+        turnOnLedLogo(x+11,y+5);
+        turnOnLedLogo(x+11,y+6);
+        turnOnLedLogo(x+11,y+7);
+        turnOnLedLogo(x+11,y+8);
+        turnOnLedLogo(x+11,y+9);
+        turnOnLedLogo(x+11,y+10);
+        turnOnLedLogo(x+11,y+11);
+        turnOnLedLogo(x+11,y+12);
+        turnOnLedLogo(x+11,y+13);
+
+        turnOnLedLogo(x+12,y-12);
+        turnOnLedLogo(x+12,y-11);
+        turnOnLedLogo(x+12,y-10);
+        turnOnLedLogo(x+12,y-9);
+        turnOnLedLogo(x+12,y-8);
+        turnOnLedLogo(x+12,y-7);
+        turnOnLedLogo(x+12,y-6);
+        turnOnLedLogo(x+12,y-5);
+        turnOnLedLogo(x+12,y-4);
+        turnOnLedLogo(x+12,y-3);
+        turnOnLedLogo(x+12,y+2);
+        turnOnLedLogo(x+12,y+3);
+
+        turnOnLedLogo(x+13,y-12);
+        turnOnLedLogo(x+13,y-11);
+        turnOnLedLogo(x+13,y-7);
+        turnOnLedLogo(x+13,y-6);
+        turnOnLedLogo(x+13,y+2);
+        turnOnLedLogo(x+13,y+3);
+
+        turnOnLedLogo(x+14,y-12);
+        turnOnLedLogo(x+14,y-11);
+        turnOnLedLogo(x+14,y-10);
+        turnOnLedLogo(x+14,y-9);
+        turnOnLedLogo(x+14,y-8);
+        turnOnLedLogo(x+14,y-7);
+        turnOnLedLogo(x+14,y-6);
+        turnOnLedLogo(x+14,y-5);
+        turnOnLedLogo(x+14,y-4);
+        turnOnLedLogo(x+14,y-3);
+        turnOnLedLogo(x+14,y-2);
+
+        turnOnLedLogo(x+15,y-11);
+        turnOnLedLogo(x+15,y-10);
+        turnOnLedLogo(x+15,y-9);
+        turnOnLedLogo(x+15,y-8);
+        turnOnLedLogo(x+15,y-7);
+        turnOnLedLogo(x+15,y-5);
+        turnOnLedLogo(x+15,y-4);
+        turnOnLedLogo(x+15,y-3);
+        turnOnLedLogo(x+15,y-2);
+
+
     }
 
 }

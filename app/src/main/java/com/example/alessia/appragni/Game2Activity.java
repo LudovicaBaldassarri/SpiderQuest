@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class Game2Activity extends AppCompatActivity implements View.OnDragListener, View.OnTouchListener{
 
 
@@ -26,9 +35,6 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
     private RelativeLayout ragnatela, ragnatela_drop;
     private String TAG = getClass().getSimpleName();
     private int ragnoR=15, ragnoB=15, ragnoG=15;
-
-    private String host_url;
-    private int host_port;
 
     int red, green, blue;// variabili dell'altra activity
 
@@ -50,6 +56,25 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
     int origin = 0;
 
     int [] nodi = { v1, b1, g1, v2, b2, g2, v3, b3, g3, v4, b4, g4, v5, b5, g5, origin};
+
+    int centerLogoX=15;
+    int getCenterLogoY=15;
+
+    private Handler handler = new Handler();
+    private Runnable runnable;
+
+    Unbinder unbinder;
+
+    private String host_url;
+    private int host_port;
+
+    //private TextWatcher myIpTextWatcher;
+    private JSONArray pixels_array;
+    private JSONArray pixels_array_LED;
+
+    private Handler mNetworkHandler, mMainHandler;
+
+    private NetworkThread mNetworkThread = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +98,36 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         findViewById(R.id.ragnoG).setOnTouchListener(this);
         findViewById(R.id.ragnoB).setOnTouchListener(this);
 
+        unbinder = ButterKnife.bind(this);
+
+        mMainHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                Toast.makeText(Game2Activity.this, (String) msg.obj, Toast.LENGTH_LONG).show();
+            }
+        };
+
+        startHandlerThread();
+        handleNetworkRequest(NetworkThread.SET_SERVER_DATA, host_url, host_port ,0);
+        pixels_array = preparePixelsArray();
+        pixels_array_LED = preparePixelsArray();
+
+    }
+
+    public void startHandlerThread(){
+        mNetworkThread = new NetworkThread(mMainHandler);
+        mNetworkThread.start();
+        mNetworkHandler = mNetworkThread.getNetworkHandler();
+
+    }
+
+    private void handleNetworkRequest(int what, Object payload, int arg1, int arg2) {
+        Message msg = mNetworkHandler.obtainMessage();
+        msg.what = what;
+        msg.obj = payload;
+        msg.arg1 = arg1;
+        msg.arg2 = arg2;
+        msg.sendToTarget();
     }
 
     public boolean onDrag(View layoutview, DragEvent dragevent){
@@ -188,5 +243,279 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
             toast.show();
         }
 
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+
+
+                    for (int i = 0; i < pixels_array.length(); i++) {
+                        ((JSONObject) pixels_array.get(i)).put("r", 0);
+                        ((JSONObject) pixels_array.get(i)).put("g", 0);
+                        ((JSONObject) pixels_array.get(i)).put("b", 0);
+                    }
+                    showArrow();
+
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
+                    pixels_array = preparePixelsArray();
+                } catch(JSONException e){
+
+                }
+            }
+        });
+        t.start();
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        spegniSchermo();
+        try{
+            pixels_array_LED = Game1Activity.preparePixelsArray();
+            handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
+        }catch (Exception e){
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+        if (mNetworkThread != null && mNetworkHandler != null) {
+            mNetworkHandler.removeMessages(mNetworkThread.SET_PIXELS);
+            mNetworkHandler.removeMessages(mNetworkThread.SET_DISPLAY_PIXELS);
+            mNetworkHandler.removeMessages(mNetworkThread.SET_SERVER_DATA);
+            mNetworkThread.quit();
+            try {
+                mNetworkThread.join(100);
+            } catch (InterruptedException ie) {
+                throw new RuntimeException(ie);
+            } finally {
+                mNetworkThread = null;
+                mNetworkHandler = null;
+            }
+        }
+    }
+
+    int computeIndex(int x, int y){
+        return y*32+x;
+    }
+
+    void spegniSchermo() {
+        try{
+            for (int i = 0; i < pixels_array.length(); i++) {
+                ((JSONObject) pixels_array.get(i)).put("r", 0);
+                ((JSONObject) pixels_array.get(i)).put("g", 0);
+                ((JSONObject) pixels_array.get(i)).put("b", 0);
+            }
+        } catch(JSONException e){
+
+        }
+
+    }
+
+    void turnOnLed(int x, int y) throws JSONException{
+        if(x<0 || y<0 || x>31 || y>31)return;
+        int current=computeIndex(x,y);
+        ((JSONObject) pixels_array.get(current)).put("r", 255);
+        ((JSONObject) pixels_array.get(current)).put("g", 255);
+        ((JSONObject) pixels_array.get(current)).put("b", 255);//utilizzo funzione computeIndex per calcolare indice di volta in volta
+    }
+
+    void showArrow(){
+        try{
+            drawArrow(centerLogoX, getCenterLogoY);
+        }catch(JSONException e){
+
+        }
+    }
+
+
+    JSONArray preparePixelsArray() {
+        JSONArray pixels_array = new JSONArray();
+        JSONObject tmp;
+        try {
+            for (int i = 0; i < 1072; i++) {
+                tmp = new JSONObject();
+                tmp.put("a", 0);
+
+                pixels_array.put(tmp);
+            }
+        } catch (JSONException exception) {
+            // No errors expected here
+        }
+        return pixels_array;
+    }
+
+    void drawArrow(int x, int y) throws JSONException{
+        turnOnLed(x-9,y+3);
+        turnOnLed(x-9,y+4);
+        turnOnLed(x-9,y+5);
+        turnOnLed(x-9,y+6);
+        turnOnLed(x-9,y+7);
+        turnOnLed(x-9,y+8);
+        turnOnLed(x-9,y+9);
+        turnOnLed(x-9,y+10);
+
+        turnOnLed(x-8,y+2);
+        turnOnLed(x-8,y+3);
+        turnOnLed(x-8,y+10);
+        turnOnLed(x-8,y+11);
+
+
+        turnOnLed(x-7,y+1);
+        turnOnLed(x-7,y+2);
+        turnOnLed(x-7,y+3);
+        turnOnLed(x-7,y+4);
+        turnOnLed(x-7,y+5);
+        turnOnLed(x-7,y+6);
+        turnOnLed(x-7,y+7);
+        turnOnLed(x-7,y+8);
+        turnOnLed(x-7,y+9);
+        turnOnLed(x-7,y+10);
+        turnOnLed(x-7,y+11);
+        turnOnLed(x-7,y+12);
+
+        turnOnLed(x-6,y+1);
+        turnOnLed(x-6,y+12);
+
+        turnOnLed(x-5,y+1);
+        turnOnLed(x-5,y+12);
+
+        turnOnLed(x-4,y-5);
+        turnOnLed(x-4,y+1);
+        turnOnLed(x-4,y+12);
+
+        turnOnLed(x-3,y-4);
+        turnOnLed(x-3,y-5);
+        turnOnLed(x-3,y+1);
+        turnOnLed(x-3,y+12);
+
+        turnOnLed(x-2,y-3);
+        turnOnLed(x-2,y-4);
+        turnOnLed(x-2,y-5);
+        turnOnLed(x-2,y+1);
+        turnOnLed(x-2,y+12);
+
+        turnOnLed(x-1,y-2);
+        turnOnLed(x-1,y-3);
+        turnOnLed(x-1,y-4);
+        turnOnLed(x-1,y-5);
+        turnOnLed(x-1,y-6);
+        turnOnLed(x-1,y-7);
+        turnOnLed(x-1,y-8);
+        turnOnLed(x-1,y-9);
+        turnOnLed(x-1,y-10);
+        turnOnLed(x-1,y-11);
+        turnOnLed(x-1,y+1);
+        turnOnLed(x-1,y+12);
+
+        turnOnLed(x,y-1);
+        turnOnLed(x,y-2);
+        turnOnLed(x,y-3);
+        turnOnLed(x,y-4);
+        turnOnLed(x,y-5);
+        turnOnLed(x,y-6);
+        turnOnLed(x,y-7);
+        turnOnLed(x,y-8);
+        turnOnLed(x,y-9);
+        turnOnLed(x,y-10);
+        turnOnLed(x,y-11);
+        turnOnLed(x,y+1);
+        turnOnLed(x,y+12);
+
+        turnOnLed(x+1,y-1);
+        turnOnLed(x+1,y-2);
+        turnOnLed(x+1,y-3);
+        turnOnLed(x+1,y-4);
+        turnOnLed(x+1,y-5);
+        turnOnLed(x+1,y-6);
+        turnOnLed(x+1,y-7);
+        turnOnLed(x+1,y-8);
+        turnOnLed(x+1,y-9);
+        turnOnLed(x+1,y-10);
+        turnOnLed(x+1,y-11);
+        turnOnLed(x+1,y+1);
+        turnOnLed(x+1,y+12);
+
+        turnOnLed(x+2,y-2);
+        turnOnLed(x+2,y-3);
+        turnOnLed(x+2,y-4);
+        turnOnLed(x+2,y-5);
+        turnOnLed(x+2,y-6);
+        turnOnLed(x+2,y-7);
+        turnOnLed(x+2,y-8);
+        turnOnLed(x+2,y-9);
+        turnOnLed(x+2,y-10);
+        turnOnLed(x+2,y-11);
+        turnOnLed(x+2,y+1);
+        turnOnLed(x+2,y+12);
+
+        turnOnLed(x+3,y-3);
+        turnOnLed(x+3,y-4);
+        turnOnLed(x+3,y-5);
+        turnOnLed(x+3,y+1);
+        turnOnLed(x+3,y+12);
+
+        turnOnLed(x+4,y-4);
+        turnOnLed(x+4,y-5);
+        turnOnLed(x+4,y+1);
+        turnOnLed(x+4,y+12);
+
+        turnOnLed(x+5,y-5);
+        turnOnLed(x+5,y+1);
+        turnOnLed(x+5,y+12);
+
+        turnOnLed(x+6,y+1);
+        turnOnLed(x+6,y+12);
+
+        turnOnLed(x+7,y+1);
+        turnOnLed(x+7,y+2);
+        turnOnLed(x+7,y+3);
+        turnOnLed(x+7,y+4);
+        turnOnLed(x+7,y+5);
+        turnOnLed(x+7,y+6);
+        turnOnLed(x+7,y+7);
+        turnOnLed(x+7,y+8);
+        turnOnLed(x+7,y+9);
+        turnOnLed(x+7,y+10);
+        turnOnLed(x+7,y+11);
+        turnOnLed(x+7,y+12);
+
+        turnOnLed(x+8,y+1);
+        turnOnLed(x+8,y+2);
+        turnOnLed(x+8,y+3);
+        turnOnLed(x+8,y+4);
+        turnOnLed(x+8,y+5);
+        turnOnLed(x+8,y+8);
+        turnOnLed(x+8,y+9);
+        turnOnLed(x+8,y+10);
+        turnOnLed(x+8,y+11);
+        turnOnLed(x+8,y+12);
+
+        turnOnLed(x+9,y+2);
+        turnOnLed(x+9,y+3);
+        turnOnLed(x+9,y+4);
+        turnOnLed(x+9,y+5);
+        turnOnLed(x+9,y+8);
+        turnOnLed(x+9,y+9);
+        turnOnLed(x+9,y+10);
+        turnOnLed(x+9,y+11);
+
+        turnOnLed(x+10,y+3);
+        turnOnLed(x+10,y+4);
+        turnOnLed(x+10,y+5);
+        turnOnLed(x+10,y+6);
+        turnOnLed(x+10,y+7);
+        turnOnLed(x+10,y+8);
+        turnOnLed(x+10,y+9);
+        turnOnLed(x+10,y+10);
     }
 }

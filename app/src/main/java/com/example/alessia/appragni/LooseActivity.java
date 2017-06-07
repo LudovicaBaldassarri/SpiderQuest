@@ -297,41 +297,6 @@ public class LooseActivity extends AppCompatActivity {
 
     }
 
-    /*void drawSpiderUp(String spiderColor, int x, int y) throws JSONException{
-        turnOnLed(spiderColor, x,y);
-        turnOnLed(spiderColor, x+1,y+1);
-        turnOnLed(spiderColor, x+2,y+2);
-        turnOnLed(spiderColor, x+3,y+3);
-        turnOnLed(spiderColor, x+1,y-1);
-        turnOnLed(spiderColor, x+2,y-2);
-        turnOnLed(spiderColor, x+3,y-3);
-        turnOnLed(spiderColor, x-1,y-1);
-        turnOnLed(spiderColor, x-2,y-2);
-        turnOnLed(spiderColor, x-3,y-3);
-        turnOnLed(spiderColor, x-1,y+1);
-        turnOnLed(spiderColor, x-2,y+2);
-        turnOnLed(spiderColor, x-3,y+3);
-
-        turnOnLed(spiderColor, x-1,y-2);
-        turnOnLed(spiderColor, x,y-2);
-        turnOnLed(spiderColor, x+1,y-2);
-        turnOnLed(spiderColor, x-3,y-1);
-        turnOnLed(spiderColor, x-2,y-1);
-        turnOnLed(spiderColor, x,y-1);
-        turnOnLed(spiderColor, x+2,y-1);
-        turnOnLed(spiderColor, x+3,y-1);
-        turnOnLed(spiderColor, x-2, y);
-        turnOnLed(spiderColor, x,y);
-        turnOnLed(spiderColor, x+1,y);
-        turnOnLed(spiderColor, x-3,y+1);
-        turnOnLed(spiderColor, x-2,y+1);
-        turnOnLed(spiderColor, x,y+1);
-        turnOnLed(spiderColor, x+2,y+1);
-        turnOnLed(spiderColor, x+3,y+1);
-        turnOnLed(spiderColor, x,y+2);
-
-    }*/
-
     void showSpiders(){
         waitTime=System.currentTimeMillis();
         long thisTime;
