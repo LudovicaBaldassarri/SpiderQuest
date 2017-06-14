@@ -359,6 +359,8 @@ public class Game1Activity extends AppCompatActivity {
         Thread t= new Thread(new Runnable() {
             public void run() {
                 try{
+                    setContentView(R.layout.ragnatela_schema);
+
 
                     handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
 

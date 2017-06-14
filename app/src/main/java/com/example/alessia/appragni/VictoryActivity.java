@@ -204,7 +204,7 @@ public class VictoryActivity extends AppCompatActivity {
 
         MainActivity.mp.stop();
         MainActivity.mpCount = 0;
-        mp = MediaPlayer.create(getApplicationContext(), R.raw.fail_sound);
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.win_sound);
         mp.start();
     }
 
