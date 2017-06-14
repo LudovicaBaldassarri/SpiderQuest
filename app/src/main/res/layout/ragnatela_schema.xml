@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,18 +13,16 @@
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayoutCompat"
+        android:id="@+id/ragnatelaslayout"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/relativeLayout"
-        android:layout_alignStart="@+id/relativeLayout">
+        >
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ragnatela_schema"
-            android:id="@+id/imageView2"
-            android:layout_above="@+id/gioca_main"
-            android:layout_alignLeft="@+id/linearLayoutCompat"
-            android:layout_alignStart="@+id/linearLayoutCompat" />
+            android:id="@+id/ragnatela_schema"
+            android:layout_alignLeft="@+id/ragnatelaslayout"
+            android:layout_alignStart="@+id/ragnatelaslayout" />
     </android.support.v7.widget.LinearLayoutCompat>
 
 </RelativeLayout>

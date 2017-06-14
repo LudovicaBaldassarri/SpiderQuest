@@ -161,6 +161,20 @@ public class Game1Activity extends AppCompatActivity {
         popup = new PopupMenu(Game1Activity.this, b);
         popup.getMenuInflater().inflate(R.menu.activity_difficolta, popup.getMenu());
 
+        destinationCalculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setContentView(R.layout.ragnatela_schema);
+
+                handler.postDelayed(runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                       destinationCalculate();
+                    }
+                }, 200);
+            }
+        });
+
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -353,14 +367,12 @@ public class Game1Activity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.play)
+    //@OnClick(R.id.play)
     void destinationCalculate(){
 
         Thread t= new Thread(new Runnable() {
             public void run() {
                 try{
-                    setContentView(R.layout.ragnatela_schema);
-
 
                     handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
 
@@ -438,7 +450,7 @@ public class Game1Activity extends AppCompatActivity {
         try {
             t.join(); // wait for thread to finish
 
-            findViewById(R.id.play).postDelayed(new Runnable() {
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     Intent intent = new Intent(Game1Activity.this, Game2Activity.class);
