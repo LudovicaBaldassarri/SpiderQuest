@@ -93,7 +93,7 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         //ragnatela_drop = (RelativeLayout) findViewById(R.id.dropLayout) ;
 
         findViewById(R.id.ragnatelaLayout).setOnDragListener(this);
-        findViewById(R.id.ragnoR).setOnTouchListener(this);
+        //findViewById(R.id.ragnoR).setOnTouchListener(this);
         findViewById(R.id.ragnoR).setOnTouchListener(this);
         findViewById(R.id.ragnoG).setOnTouchListener(this);
         findViewById(R.id.ragnoB).setOnTouchListener(this);
