@@ -1,6 +1,7 @@
 package com.example.alessia.appragni;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -65,6 +66,8 @@ public class LooseActivity extends AppCompatActivity {
     private Handler mNetworkHandler, mMainHandler;
 
     private NetworkThread mNetworkThread = null;
+
+    MediaPlayer mp;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,20 +202,28 @@ public class LooseActivity extends AppCompatActivity {
             }
         });
         t.start();
+
+        MainActivity.mp.stop();
+        MainActivity.mpCount = 0;
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.fail_sound);
+        mp.start();
     }
 
-    @Override
+   @Override
     protected void onStop(){
         super.onStop();
         spegniSchermo();
         try{
-            pixels_array_LED = Game1Activity.preparePixelsArray();
+            pixels_array_LED = Game1Activity.prepareLedPixelsArray();
+            pixels_array = Game1Activity.prepareDisplayPixelsArray();
             handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
             handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
         }catch (Exception e){
 
         }
-    }
+
+       mp.stop();
+   }
 
 
     @Override
@@ -361,6 +372,7 @@ public class LooseActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     moveSpiders();
+                    //showLeds();
                 }
             }, 200);
 
@@ -442,6 +454,7 @@ public class LooseActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     showSpiders();
+                    //showLeds();
                 }
             }, 200);
 
@@ -465,12 +478,12 @@ public class LooseActivity extends AppCompatActivity {
             }
             handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
 
-            handler.postDelayed(runnable = new Runnable() {
+            /*handler.postDelayed(runnable = new Runnable() {
                 @Override
                 public void run() {
                     showLeds();
                 }
-            }, 200);
+            }, 200);*/
 
         } catch (Exception e) {
             e.printStackTrace();

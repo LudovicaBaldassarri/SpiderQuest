@@ -1,6 +1,7 @@
 package com.example.alessia.appragni;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
 
-
+    static MediaPlayer mp;
+    static int mpCount = 0;
 
     private GoogleApiClient client;
 
@@ -30,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        mpCount++;
+
+        if(mpCount==1){
+            mp = MediaPlayer.create(getApplicationContext(), R.raw.menu);
+            mp.start();
+            mp.setLooping(true);
+        } else {
+            mpCount=1;
+        }
     }
 
     public void openInstruction(View view) {

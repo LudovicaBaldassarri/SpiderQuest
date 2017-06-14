@@ -1,12 +1,12 @@
 package com.example.alessia.appragni;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.View;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.PopupMenu;
@@ -113,9 +113,11 @@ public class Game1Activity extends AppCompatActivity {
 
     Unbinder unbinder;
 
-    private String host_url = "192.168.0.117";
+    private String host_url = "192.168.2.3";
     private int host_port = 8080;
 
+    private Handler handler = new Handler();
+    private Runnable runnable;
 
 
     @BindViews({R.id.first_byte_ip, R.id.second_byte_ip, R.id.third_byte_ip, R.id.fourth_byte_ip})
@@ -134,7 +136,7 @@ public class Game1Activity extends AppCompatActivity {
 
 
     private TextWatcher myIpTextWatcher;
-    private JSONArray pixels_array;
+    private JSONArray pixels_array_DISPLAY;
     private JSONArray pixels_array_LED;
 
     private Handler mNetworkHandler, mMainHandler;
@@ -186,6 +188,8 @@ public class Game1Activity extends AppCompatActivity {
                     }
                 });
                 popup.show();
+
+
             }
         });
 
@@ -231,7 +235,8 @@ public class Game1Activity extends AppCompatActivity {
 
         startHandlerThread();
         handleNetworkRequest(NetworkThread.SET_SERVER_DATA, host_url, host_port ,0);
-        pixels_array = preparePixelsArray();
+        pixels_array_LED = prepareLedPixelsArray();
+        pixels_array_DISPLAY = prepareDisplayPixelsArray();
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -241,6 +246,11 @@ public class Game1Activity extends AppCompatActivity {
         });
         t.start();
 
+        if(MainActivity.mpCount==0){
+            MainActivity.mp = MediaPlayer.create(getApplicationContext(), R.raw.menu);
+            MainActivity.mp.start();
+            MainActivity.mp.setLooping(true);
+        }
     }
 
     public void startHandlerThread() {
@@ -301,48 +311,24 @@ public class Game1Activity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-
-
-                    for (int i = 0; i < pixels_array.length(); i++) {
-                        ((JSONObject) pixels_array.get(i)).put("r", 0);
-                        ((JSONObject) pixels_array.get(i)).put("g", 0);
-                        ((JSONObject) pixels_array.get(i)).put("b", 0);
-                    }
-                    showLogo();
-
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
-                    pixels_array = preparePixelsArray();
-                } catch(JSONException e){
-
-                }
-            }
-        });
-        t.start();
-    }
-
     private void showRagnatela() {
 
         try{
 
-            pixels_array_LED = preparePixelsArray();
             handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
 
-            for (int i = 0; i < pixels_array.length(); i++) {
-                ((JSONObject) pixels_array.get(i)).put("r", 0);
-                ((JSONObject) pixels_array.get(i)).put("g", 0);
-                ((JSONObject) pixels_array.get(i)).put("b", 0);
-            }
+            handler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    showLogo();
 
-            handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0, 0);
-            pixels_array = preparePixelsArray();
-        } catch(JSONException e){
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
+                }
+            }, 200);
+
+            //Thread.sleep(5000);
+            //pixels_array_DISPLAY = prepareDIPixelsArray();
+        } catch(Exception e){
 
         }
     }
@@ -374,9 +360,7 @@ public class Game1Activity extends AppCompatActivity {
             public void run() {
                 try{
 
-                    JSONArray pixels_array = preparePixelsArray();
-
-                    handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array, 0, 0);
+                    handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
 
                     for(int i=0;i<3;i++) {
                         int index = new Random().nextInt(exit.length);
@@ -435,7 +419,7 @@ public class Game1Activity extends AppCompatActivity {
 
                     showSpiders();
 
-                    startTest(rdest, gdest, bdest, pixels_array);
+                    startTest(rdest, gdest, bdest, pixels_array_LED);
 
                     System.out.print(rstopped);
                     System.out.print(gstopped);
@@ -502,7 +486,7 @@ public class Game1Activity extends AppCompatActivity {
 
     private void startTest(int rdest, int gdest, int bdest, JSONArray pixels_array){
         try{
-            Thread.sleep(speed/2);
+            Thread.sleep(20*speed/2);
             int rfirst = rdest;
             int gfirst = gdest;
             int bfirst = bdest;
@@ -882,10 +866,10 @@ public class Game1Activity extends AppCompatActivity {
     }
 
     void spegniTutto() throws JSONException{
-        for (int i = 0; i < pixels_array.length(); i++) {
-            ((JSONObject) pixels_array.get(i)).put("r", 0);
-            ((JSONObject) pixels_array.get(i)).put("g", 0);
-            ((JSONObject) pixels_array.get(i)).put("b", 0);
+        for (int i = 0; i < pixels_array_DISPLAY.length(); i++) {
+            ((JSONObject) pixels_array_DISPLAY.get(i)).put("r", 0);
+            ((JSONObject) pixels_array_DISPLAY.get(i)).put("g", 0);
+            ((JSONObject) pixels_array_DISPLAY.get(i)).put("b", 0);
         }
     }
 
@@ -922,7 +906,7 @@ public class Game1Activity extends AppCompatActivity {
     void turnOnLed(String spiderColor, int x, int y) throws JSONException{
         if(x<0 || y<0 || x>31 || y>31)return;
         int current=computeIndex(x,y);
-        ((JSONObject) pixels_array.get(current)).put(spiderColor, 255); //utilizzo funzione computeIndex per calcolare indice di volta in volta
+        ((JSONObject) pixels_array_DISPLAY.get(current)).put(spiderColor, 255); //utilizzo funzione computeIndex per calcolare indice di volta in volta
     }
 
     void drawSpider(String spiderColor, int x, int y) throws JSONException{
@@ -995,7 +979,7 @@ public class Game1Activity extends AppCompatActivity {
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastR=currentR;
                 }
 
@@ -1004,7 +988,7 @@ public class Game1Activity extends AppCompatActivity {
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastG=currentG;
                 }
 
@@ -1013,7 +997,7 @@ public class Game1Activity extends AppCompatActivity {
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastB=currentB;
                 }
 
@@ -1060,7 +1044,7 @@ public class Game1Activity extends AppCompatActivity {
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastR=currentR;
                 }
 
@@ -1069,7 +1053,7 @@ public class Game1Activity extends AppCompatActivity {
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastG=currentG;
                 }
 
@@ -1078,7 +1062,7 @@ public class Game1Activity extends AppCompatActivity {
                     drawSpider("r", xRA, yRA);
                     drawSpider("g", xGA, yGA);
                     drawSpider("b", xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
+                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastB=currentB;
                 }
 
@@ -1118,7 +1102,7 @@ public class Game1Activity extends AppCompatActivity {
         msg.sendToTarget();
     }
 
-    static JSONArray preparePixelsArray() {
+    static JSONArray prepareLedPixelsArray() {
         JSONArray pixels_array = new JSONArray();
         JSONObject tmp;
         try {
@@ -1134,6 +1118,24 @@ public class Game1Activity extends AppCompatActivity {
                     tmp.put("g", 255);
                     tmp.put("b", 255);
                 }
+                pixels_array.put(tmp);
+            }
+        } catch (JSONException exception) {
+            // No errors expected here
+        }
+        return pixels_array;
+    }
+
+    static JSONArray prepareDisplayPixelsArray() {
+        JSONArray pixels_array = new JSONArray();
+        JSONObject tmp;
+        try {
+            for (int i = 0; i < 1072; i++) {
+                tmp = new JSONObject();
+                tmp.put("a", 0);
+                    tmp.put("g", 0);
+                    tmp.put("b", 0);
+                    tmp.put("r", 0);
                 pixels_array.put(tmp);
             }
         } catch (JSONException exception) {
@@ -1160,7 +1162,12 @@ public class Game1Activity extends AppCompatActivity {
     void turnOnLedLogo(int x, int y) throws JSONException{
         if(x<0 || y<0 || x>31 || y>31)return;
         int current=computeIndex(x,y);
-        ((JSONObject) pixels_array.get(current)).put("r", 255); //utilizzo funzione computeIndex per calcolare indice di volta in volta
+        try {
+            ((JSONObject) pixels_array_DISPLAY.get(current)).put("r", 255); //utilizzo funzione computeIndex per calcolare indice di volta in volta
+
+        }catch(JSONException e){
+
+        }
     }
 
     void showLogo(){

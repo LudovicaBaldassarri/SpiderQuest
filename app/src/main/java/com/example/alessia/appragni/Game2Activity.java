@@ -276,7 +276,8 @@ public class Game2Activity extends AppCompatActivity implements View.OnDragListe
         super.onStop();
         spegniSchermo();
         try{
-            pixels_array_LED = Game1Activity.preparePixelsArray();
+            pixels_array_LED = Game1Activity.prepareLedPixelsArray();
+            pixels_array = Game1Activity.prepareDisplayPixelsArray();
             handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
             handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
         }catch (Exception e){

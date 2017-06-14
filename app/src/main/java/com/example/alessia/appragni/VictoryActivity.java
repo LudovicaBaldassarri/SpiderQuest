@@ -1,6 +1,7 @@
 package com.example.alessia.appragni;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -61,6 +62,8 @@ public class VictoryActivity extends AppCompatActivity {
 
     private NetworkThread mNetworkThread = null;
 
+    MediaPlayer mp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +116,6 @@ public class VictoryActivity extends AppCompatActivity {
         handleNetworkRequest(NetworkThread.SET_SERVER_DATA, host_url, host_port ,0);
         pixels_array = preparePixelsArray();
         pixels_array_LED = preparePixelsArray();
-
     }
 
 
@@ -199,6 +201,11 @@ public class VictoryActivity extends AppCompatActivity {
             }
         });
         t.start();
+
+        MainActivity.mp.stop();
+        MainActivity.mpCount = 0;
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.fail_sound);
+        mp.start();
     }
 
     @Override
@@ -206,12 +213,15 @@ public class VictoryActivity extends AppCompatActivity {
         super.onStop();
         spegniSchermo();
         try{
-            pixels_array_LED = Game1Activity.preparePixelsArray();
+            pixels_array_LED = Game1Activity.prepareLedPixelsArray();
+            pixels_array = Game1Activity.prepareDisplayPixelsArray();
             handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array, 0 ,0);
             handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
         }catch (Exception e){
 
         }
+
+        mp.stop();
     }
 
 
