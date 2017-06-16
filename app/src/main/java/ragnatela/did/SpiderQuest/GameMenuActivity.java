@@ -93,11 +93,11 @@ public class GameMenuActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-        mp.pause();
-    }
+//    @Override
+//    protected void onPause(){
+//        super.onPause();
+//        mp.pause();
+//    }
 
     @Override
     protected void onDestroy(){

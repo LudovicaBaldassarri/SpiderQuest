@@ -1497,7 +1497,8 @@ class RagnatelaHandler {
         xBA=0;
         yBA=0;
 
-        showSpidersDown();
+        //showSpidersDown();
+        //showLedWin();
     }
 
     private void drawSpiderDown(String spiderColor, int x, int y) throws JSONException{
@@ -1737,6 +1738,7 @@ class RagnatelaHandler {
         distYBA = 0;
 
         showSpidersFalling();
+        //ShowLedLoose();
     }
 
     private void drawSpiderFalling(String spiderColor, int x, int y) throws JSONException{

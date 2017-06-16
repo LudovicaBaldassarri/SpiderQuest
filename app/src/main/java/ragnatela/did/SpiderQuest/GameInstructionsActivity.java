@@ -20,19 +20,19 @@ public class GameInstructionsActivity extends AppCompatActivity {
         host_port = getIntent().getExtras().getInt("hostPort");
     }
 
-    protected void onResume(){
-        super.onResume();
-        if(!GameMenuActivity.mp.isPlaying()){
-            GameMenuActivity.mp.start();
-            GameMenuActivity.mp.setLooping(true);
-        }
-    }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        GameMenuActivity.mp.pause();
-    }
+//    protected void onResume(){
+//        super.onResume();
+//        if(!GameMenuActivity.mp.isPlaying()){
+//            GameMenuActivity.mp.start();
+//            GameMenuActivity.mp.setLooping(true);
+//        }
+//    }
+//
+//    @Override
+//    protected void onPause(){
+//        super.onPause();
+//        GameMenuActivity.mp.pause();
+//    }
 
     public void openFirstInstruction(View view) {
         setContentView(R.layout.activity_game_instructions1);

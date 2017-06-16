@@ -37,19 +37,19 @@ public class GamePlayingActivity extends AppCompatActivity{
         t.start();
     }
 
-    protected void onResume(){
-        super.onResume();
-        if(!GameMenuActivity.mp.isPlaying()){
-            GameMenuActivity.mp.start();
-            GameMenuActivity.mp.setLooping(true);
-        }
-    }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        GameMenuActivity.mp.pause();
-    }
+//    protected void onResume(){
+//        super.onResume();
+//        if(!GameMenuActivity.mp.isPlaying()){
+//            GameMenuActivity.mp.start();
+//            GameMenuActivity.mp.setLooping(true);
+//        }
+//    }
+//
+//    @Override
+//    protected void onPause(){
+//        super.onPause();
+//        GameMenuActivity.mp.pause();
+//    }
 
     @Override
     protected void onDestroy(){
