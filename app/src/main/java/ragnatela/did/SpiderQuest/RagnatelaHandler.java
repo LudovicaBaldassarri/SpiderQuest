@@ -1497,7 +1497,7 @@ class RagnatelaHandler {
         xBA=0;
         yBA=0;
 
-        //showSpidersDown();
+        showSpidersDown();
         //showLedWin();
     }
 
