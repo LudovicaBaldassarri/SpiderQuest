@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Spider Quest</string>
     <string name="gioca">Play</string>
     <string name="istruzioni">Instructions</string>
     <string name="menu">Menu</string>
@@ -21,4 +22,6 @@
     <string name="difficile">Hard</string>
     <string name="livello">Difficulty</string>
     <string name="finisci">Set the spiders!</string>
+    <string name="imposta">Set the difficulty!</string>
+        />
 </resources>

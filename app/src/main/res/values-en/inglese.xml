@@ -21,4 +21,6 @@
     <string name="difficile">Hard</string>
     <string name="livello">Difficulty</string>
     <string name="finisci">Set the spiders!</string>
+    <string name="imposta">Set the difficulty! </string>
+    />
 </resources>

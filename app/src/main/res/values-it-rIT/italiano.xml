@@ -23,4 +23,6 @@
     <string name="difficile">Difficile</string>
     <string name="livello">Difficoltà</string>
     <string name="finisci">Posiziona i ragni!</string>
+    <string name="imposta">Imposta la difficoltà</string>
+    />
 </resources>

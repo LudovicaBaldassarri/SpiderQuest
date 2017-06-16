@@ -4,7 +4,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "com.example.alessia.appragni"
+        applicationId "ragnatela.did.appragni"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
@@ -17,7 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    useLibrary 'org.apache.http.legacy'
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
