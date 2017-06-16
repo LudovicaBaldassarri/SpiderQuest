@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-class GameEndActivity extends AppCompatActivity {
+public class GameEndActivity extends AppCompatActivity {
 
     private String host_url;
     private int host_port;

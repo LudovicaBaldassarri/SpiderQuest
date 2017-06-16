@@ -17,7 +17,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".SpiderQuest.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,23 +27,23 @@
         </activity>
 
         <activity
-            android:name=".SpiderQuest.GameMenuActivity"
+            android:name=".GameMenuActivity"
             android:screenOrientation="sensorLandscape" />
 
         <activity
-            android:name=".SpiderQuest.GameInstructionsActivity"
+            android:name=".GameInstructionsActivity"
             android:screenOrientation="sensorLandscape" />
 
         <activity
-        android:name=".SpiderQuest.GamePlayingActivity"
+        android:name=".GamePlayingActivity"
         android:screenOrientation="sensorLandscape" />
 
         <activity
-            android:name=".SpiderQuest.GameDragActivity"
+            android:name=".GameDragActivity"
             android:screenOrientation="sensorLandscape" />
 
         <activity
-            android:name=".SpiderQuest.GameEndActivity"
+            android:name=".GameEndActivity"
             android:screenOrientation="sensorLandscape" />
 
     </application>
