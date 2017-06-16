@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -17,6 +18,7 @@ public class GameEndActivity extends AppCompatActivity {
     MediaPlayer mp2;
 
     boolean win;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +46,7 @@ public class GameEndActivity extends AppCompatActivity {
         Context context = GameEndActivity.this;
 
         ragnatelaHandler = new RagnatelaHandler(host_url, host_port, gameSpeed, context);
-    }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -61,18 +59,30 @@ public class GameEndActivity extends AppCompatActivity {
         t.start();
     }
 
+    protected void onResume(){
+        super.onResume();
+        if(!mp2.isPlaying()){
+            mp2.start();
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mp2.pause();
+    }
+
     @Override
     protected void onStop(){
         super.onStop();
-        mp2.stop();
-        mp2.release();
-        finish();
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
         ragnatelaHandler.destroy();
+        mp2.stop();
+        mp2.release();
     }
 
     public void backtoMenu(View view){

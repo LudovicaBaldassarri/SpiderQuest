@@ -68,6 +68,12 @@ public class GameMenuActivity extends AppCompatActivity {
         Thread t= new Thread(new Runnable() {
             public void run() {
                 ragnatelaHandler.init();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ragnatelaHandler.showLogo();
+                    }
+                }, 200);
             }
         });
         t.start();
@@ -81,17 +87,16 @@ public class GameMenuActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        Thread t= new Thread(new Runnable() {
-            public void run() {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ragnatelaHandler.showLogo();
-                    }
-                }, 200);
-            }
-        });
-        t.start();
+        if(!mp.isPlaying()){
+            mp.start();
+            mp.setLooping(true);
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mp.pause();
     }
 
     @Override

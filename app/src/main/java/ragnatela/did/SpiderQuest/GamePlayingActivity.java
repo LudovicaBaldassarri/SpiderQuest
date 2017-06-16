@@ -28,11 +28,6 @@ public class GamePlayingActivity extends AppCompatActivity{
         Context context = GamePlayingActivity.this;
 
         ragnatelaHandler = new RagnatelaHandler(host_url, host_port, gameSpeed, context);
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
 
         Thread t= new Thread(new Runnable() {
             public void run() {
@@ -40,6 +35,20 @@ public class GamePlayingActivity extends AppCompatActivity{
             }
         });
         t.start();
+    }
+
+    protected void onResume(){
+        super.onResume();
+        if(!GameMenuActivity.mp.isPlaying()){
+            GameMenuActivity.mp.start();
+            GameMenuActivity.mp.setLooping(true);
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        GameMenuActivity.mp.pause();
     }
 
     @Override

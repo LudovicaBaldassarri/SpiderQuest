@@ -84,11 +84,6 @@ public class GameDragActivity extends AppCompatActivity implements View.OnDragLi
         findViewById(R.id.ragnoG).setOnTouchListener(this);
         findViewById(R.id.ragnoB).setOnTouchListener(this);
 
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
         Thread t= new Thread(new Runnable() {
             public void run() {
                 handler.postDelayed(new Runnable() {
@@ -100,6 +95,21 @@ public class GameDragActivity extends AppCompatActivity implements View.OnDragLi
             }
         });
         t.start();
+
+    }
+
+    protected void onResume(){
+        super.onResume();
+        if(!GameMenuActivity.mp.isPlaying()){
+            GameMenuActivity.mp.start();
+            GameMenuActivity.mp.setLooping(true);
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        GameMenuActivity.mp.pause();
     }
 
     @Override
