@@ -2,6 +2,7 @@ package ragnatela.did.SpiderQuest;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -94,6 +95,8 @@ class RagnatelaHandler {
     private static int host_port;
     private static int gameSpeed;
 
+    private boolean exitGame;
+
     private Handler mNetworkHandler, mMainHandler;
     private NetworkThread mNetworkThread = null;
 
@@ -101,11 +104,15 @@ class RagnatelaHandler {
 
     private Context context;
 
+    private static MediaPlayer mp;
+
     RagnatelaHandler(String hu, int hp, int gs, Context c) {
         host_url = hu;
         host_port = hp;
         gameSpeed = gs;
         context = c;
+
+        exitGame = false;
 
         mMainHandler = new Handler() {
             @Override
@@ -118,6 +125,30 @@ class RagnatelaHandler {
         handleNetworkRequest(NetworkThread.SET_SERVER_DATA, host_url, host_port ,0);
     }
 
+    void playMusic(Context c) {
+        if(mp == null){
+            mp = MediaPlayer.create(c, R.raw.menu);
+            mp.start();
+            mp.setLooping(true);
+        }
+    }
+
+    void resumeMusic(){
+        if(!mp.isPlaying()){
+            mp.start();
+            mp.setLooping(true);
+        }
+    }
+
+    void pauseMusic(){
+        mp.pause();
+    }
+
+    void resetMediaPlayer(){
+        mp.stop();
+        mp = null;
+    }
+
     void setGameSpeed(int gs) {
         gameSpeed = gs;
     }
@@ -126,7 +157,7 @@ class RagnatelaHandler {
         return mNetworkHandler;
     }
 
-    void init(){
+    private void init(){
         try{
             pixels_array_LED = prepareLedPixelsArray();
             pixels_array_DISPLAY = prepareDisplayPixelsArray();
@@ -146,18 +177,18 @@ class RagnatelaHandler {
                 tmp = new JSONObject();
                 tmp.put("a", 0);
                 if (isInNode(i)) {
-                    tmp.put("g", 0);
-                    tmp.put("b", 0);
-                    tmp.put("r", 0);
-                } else {
-                    tmp.put("r", 255);
                     tmp.put("g", 255);
                     tmp.put("b", 255);
+                    tmp.put("r", 255);
+                } else {
+                    tmp.put("r", 0);
+                    tmp.put("g", 0);
+                    tmp.put("b", 0);
                 }
                 pixels_array.put(tmp);
             }
         } catch (JSONException exception) {
-            // No errors expected here
+            exception.printStackTrace();
         }
         return pixels_array;
     }
@@ -196,6 +227,7 @@ class RagnatelaHandler {
 
     void showLogo(){
         try{
+            init();
             drawLogo(centerLogoX, getCenterLogoY);
             handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
         }catch(JSONException e){
@@ -1179,15 +1211,15 @@ class RagnatelaHandler {
                                     ((JSONObject) pixels_array_LED.get(rprevious)).put("g", 0);
                                     ((JSONObject) pixels_array_LED.get(rprevious)).put("b", 255);
                                 } else {
-                                    ((JSONObject) pixels_array_LED.get(rprevious)).put("r", 0);
-                                    ((JSONObject) pixels_array_LED.get(rprevious)).put("g", 0);
-                                    ((JSONObject) pixels_array_LED.get(rprevious)).put("b", 0);
+                                    ((JSONObject) pixels_array_LED.get(rprevious)).put("r", 255);
+                                    ((JSONObject) pixels_array_LED.get(rprevious)).put("g", 255);
+                                    ((JSONObject) pixels_array_LED.get(rprevious)).put("b", 255);
                                 }
                             }
                         } else {
-                            ((JSONObject) pixels_array_LED.get(rprevious)).put("r", 255);
-                            ((JSONObject) pixels_array_LED.get(rprevious)).put("g", 255);
-                            ((JSONObject) pixels_array_LED.get(rprevious)).put("b", 255);
+                            ((JSONObject) pixels_array_LED.get(rprevious)).put("r", 0);
+                            ((JSONObject) pixels_array_LED.get(rprevious)).put("g", 0);
+                            ((JSONObject) pixels_array_LED.get(rprevious)).put("b", 0);
                         }
                     }
                     rprevious = rcurrent;
@@ -1283,15 +1315,15 @@ class RagnatelaHandler {
                                     ((JSONObject) pixels_array_LED.get(gprevious)).put("g", 0);
                                     ((JSONObject) pixels_array_LED.get(gprevious)).put("b", 255);
                                 } else {
-                                    ((JSONObject) pixels_array_LED.get(gprevious)).put("r", 0);
-                                    ((JSONObject) pixels_array_LED.get(gprevious)).put("g", 0);
-                                    ((JSONObject) pixels_array_LED.get(gprevious)).put("b", 0);
+                                    ((JSONObject) pixels_array_LED.get(gprevious)).put("r", 255);
+                                    ((JSONObject) pixels_array_LED.get(gprevious)).put("g", 255);
+                                    ((JSONObject) pixels_array_LED.get(gprevious)).put("b", 255);
                                 }
                             }
                         } else {
-                            ((JSONObject) pixels_array_LED.get(gprevious)).put("r", 255);
-                            ((JSONObject) pixels_array_LED.get(gprevious)).put("g", 255);
-                            ((JSONObject) pixels_array_LED.get(gprevious)).put("b", 255);
+                            ((JSONObject) pixels_array_LED.get(gprevious)).put("r", 0);
+                            ((JSONObject) pixels_array_LED.get(gprevious)).put("g", 0);
+                            ((JSONObject) pixels_array_LED.get(gprevious)).put("b", 0);
                         }
                     }
                     gprevious = gcurrent;
@@ -1387,15 +1419,15 @@ class RagnatelaHandler {
                                     ((JSONObject) pixels_array_LED.get(bprevious)).put("g", 255);
                                     ((JSONObject) pixels_array_LED.get(bprevious)).put("b", 0);
                                 } else {
-                                    ((JSONObject) pixels_array_LED.get(bprevious)).put("r", 0);
-                                    ((JSONObject) pixels_array_LED.get(bprevious)).put("g", 0);
-                                    ((JSONObject) pixels_array_LED.get(bprevious)).put("b", 0);
+                                    ((JSONObject) pixels_array_LED.get(bprevious)).put("r", 255);
+                                    ((JSONObject) pixels_array_LED.get(bprevious)).put("g", 255);
+                                    ((JSONObject) pixels_array_LED.get(bprevious)).put("b", 255);
                                 }
                             }
                         } else {
-                            ((JSONObject) pixels_array_LED.get(bprevious)).put("r", 255);
-                            ((JSONObject) pixels_array_LED.get(bprevious)).put("g", 255);
-                            ((JSONObject) pixels_array_LED.get(bprevious)).put("b", 255);
+                            ((JSONObject) pixels_array_LED.get(bprevious)).put("r", 0);
+                            ((JSONObject) pixels_array_LED.get(bprevious)).put("g", 0);
+                            ((JSONObject) pixels_array_LED.get(bprevious)).put("b", 0);
                         }
                     }
                     bprevious = bcurrent;
@@ -1628,13 +1660,18 @@ class RagnatelaHandler {
                 lastB=currentB;
             }
 
-            // Lancio tramite handler le due funzioni in modo che luppino ogni 200 millisecondi
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    showSpidersUp();
-                }
-            }, 200);
+            if(!getExit()){
+                // Lancio tramite handler le due funzioni in modo che luppino ogni 200 millisecondi
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showSpidersUp();
+                    }
+                }, 200);
+            } else{
+                spegniDisplay();
+                handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
+            }
 
         }catch(JSONException e){
             e.printStackTrace();
@@ -1694,12 +1731,17 @@ class RagnatelaHandler {
                 lastB=currentB;
             }
 
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    showSpidersDown();
-                }
-            }, 200);
+            if(!getExit()){
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showSpidersDown();
+                    }
+                }, 200);
+            } else{
+                spegniDisplay();
+                handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
+            }
 
 
         }catch(JSONException e){
@@ -1737,8 +1779,7 @@ class RagnatelaHandler {
         distXBA = 0;
         distYBA = 0;
 
-        showSpidersFalling();
-        //ShowLedLoose();
+        moveSpidersFalling();
     }
 
     private void drawSpiderFalling(String spiderColor, int x, int y) throws JSONException{
@@ -1779,82 +1820,80 @@ class RagnatelaHandler {
 
     }
 
-    private void showSpidersFalling(){
-        waitTime=System.currentTimeMillis();
-        long thisTime;
-        int lastR=-1;
-        int lastG=-1;
-        int lastB=-1;
-        int currentR;
-        int currentG;
-        int currentB;
-
-
-        try{
-
-
-            do {
-
-                //tempo attuale - tempo di partenza minore della durata totale in millisecondi
-                //Log.d("PCT", "pct= "+ pct);
-                xRA = Math.round(beginXRA);
-                yRA = Math.round(beginYRA);
-                xGA = Math.round(beginXGA);
-                yGA = Math.round(beginYGA);
-                xBA = Math.round(beginXBA);
-                yBA = Math.round(beginYBA);
-                currentR = computeIndex(xRA, yRA);
-                currentG = computeIndex(xGA, yGA);
-                currentB = computeIndex(xBA, yBA);
-
-                if (lastR != currentR) {
-                    spegniDisplay();
-                    drawSpiderFalling(red, xRA, yRA);
-                    drawSpiderFalling(green, xGA, yGA);
-                    drawSpiderFalling(blu, xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
-                    lastR = currentR;
-                }
-
-                if (lastG != currentG) {
-                    spegniDisplay();
-                    drawSpiderFalling(red, xRA, yRA);
-                    drawSpiderFalling(green, xGA, yGA);
-                    drawSpiderFalling(blu, xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
-                    lastG = currentG;
-                }
-
-                if (lastB != currentB) {
-                    spegniDisplay();
-                    drawSpiderFalling(red, xRA, yRA);
-                    drawSpiderFalling(green, xGA, yGA);
-                    drawSpiderFalling(blu, xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
-                    lastB = currentB;
-                }
-
-                thisTime = System.currentTimeMillis() - waitTime;
-
-            }while(thisTime<200);
-
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    moveSpidersFalling();
-                    //showLeds();
-                }
-            }, 200);
-
-
-
-
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
-
-    }
+//    private void showSpidersFalling(){
+//        waitTime=System.currentTimeMillis();
+//        long thisTime;
+//        int lastR=-1;
+//        int lastG=-1;
+//        int lastB=-1;
+//        int currentR;
+//        int currentG;
+//        int currentB;
+//
+//        try{
+//
+//            do {
+//
+//                //tempo attuale - tempo di partenza minore della durata totale in millisecondi
+//                //Log.d("PCT", "pct= "+ pct);
+//                xRA = Math.round(beginXRA);
+//                yRA = Math.round(beginYRA);
+//                xGA = Math.round(beginXGA);
+//                yGA = Math.round(beginYGA);
+//                xBA = Math.round(beginXBA);
+//                yBA = Math.round(beginYBA);
+//                currentR = computeIndex(xRA, yRA);
+//                currentG = computeIndex(xGA, yGA);
+//                currentB = computeIndex(xBA, yBA);
+//
+//                if (lastR != currentR) {
+//                    spegniDisplay();
+//                    drawSpiderFalling(red, xRA, yRA);
+//                    drawSpiderFalling(green, xGA, yGA);
+//                    drawSpiderFalling(blu, xBA, yBA);
+//                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
+//                    lastR = currentR;
+//                }
+//
+//                if (lastG != currentG) {
+//                    spegniDisplay();
+//                    drawSpiderFalling(red, xRA, yRA);
+//                    drawSpiderFalling(green, xGA, yGA);
+//                    drawSpiderFalling(blu, xBA, yBA);
+//                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
+//                    lastG = currentG;
+//                }
+//
+//                if (lastB != currentB) {
+//                    spegniDisplay();
+//                    drawSpiderFalling(red, xRA, yRA);
+//                    drawSpiderFalling(green, xGA, yGA);
+//                    drawSpiderFalling(blu, xBA, yBA);
+//                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
+//                    lastB = currentB;
+//                }
+//
+//                thisTime = System.currentTimeMillis() - waitTime;
+//
+//            }while(thisTime<200 && !getExit());
+//
+//            if(!getExit()){
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        showSpidersFalling();
+//
+//                    }
+//                }, 200);
+//            } else{
+//                spegniDisplay();
+//                handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
+//            }
+//        }catch(JSONException e){
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     private void moveSpidersFalling(){
 
@@ -1876,57 +1915,66 @@ class RagnatelaHandler {
 
         try{
 
-            do {
+            if(!getExit()) {
 
-                pct = (System.currentTimeMillis() - startTime) / (movementDuration * 1000);  //tempo attuale - tempo di partenza minore della durata totale in millisecondi
-                //Log.d("PCT", "pct= "+ pct);
-                xRA = Math.round(beginXRA + pct * distXRA);
-                yRA = Math.round(beginYRA + pct * distYRA);
-                xGA = Math.round(beginXGA + pct * distXGA);
-                yGA = Math.round(beginYGA + pct * distYGA);
-                xBA = Math.round(beginXBA + pct * distXBA);
-                yBA = Math.round(beginYBA + pct * distYBA);
-                currentR = computeIndex(xRA, yRA);
-                currentG = computeIndex(xGA, yGA);
-                currentB = computeIndex(xBA, yBA);
+                do {
 
-                if (lastR != currentR) {
-                    spegniDisplay();
-                    drawSpiderFalling(red, xRA, yRA);
-                    drawSpiderFalling(green, xGA, yGA);
-                    drawSpiderFalling(blu, xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
-                    lastR = currentR;
+                    pct = (System.currentTimeMillis() - startTime) / (movementDuration * 1000);  //tempo attuale - tempo di partenza minore della durata totale in millisecondi
+
+                    if(!getExit()) {
+
+                        //Log.d("PCT", "pct= "+ pct);
+                        xRA = Math.round(beginXRA + pct * distXRA);
+                        yRA = Math.round(beginYRA + pct * distYRA);
+                        xGA = Math.round(beginXGA + pct * distXGA);
+                        yGA = Math.round(beginYGA + pct * distYGA);
+                        xBA = Math.round(beginXBA + pct * distXBA);
+                        yBA = Math.round(beginYBA + pct * distYBA);
+                        currentR = computeIndex(xRA, yRA);
+                        currentG = computeIndex(xGA, yGA);
+                        currentB = computeIndex(xBA, yBA);
+
+                        if (lastR != currentR) {
+                            spegniDisplay();
+                            drawSpiderFalling(red, xRA, yRA);
+                            drawSpiderFalling(green, xGA, yGA);
+                            drawSpiderFalling(blu, xBA, yBA);
+                            handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
+                            lastR = currentR;
+                        }
+
+                        if (lastG != currentG) {
+                            spegniDisplay();
+                            drawSpiderFalling(red, xRA, yRA);
+                            drawSpiderFalling(green, xGA, yGA);
+                            drawSpiderFalling(blu, xBA, yBA);
+                            handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
+                            lastG = currentG;
+                        }
+
+                        if (lastB != currentB) {
+                            spegniDisplay();
+                            drawSpiderFalling(red, xRA, yRA);
+                            drawSpiderFalling(green, xGA, yGA);
+                            drawSpiderFalling(blu, xBA, yBA);
+                            handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
+                            lastB = currentB;
+                        }
+                    }
+                } while (pct < 1.0f && !getExit());
+
+                if(!getExit()){
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            moveSpidersFalling();
+                        }
+                    }, 200);
                 }
-
-                if (lastG != currentG) {
-                    spegniDisplay();
-                    drawSpiderFalling(red, xRA, yRA);
-                    drawSpiderFalling(green, xGA, yGA);
-                    drawSpiderFalling(blu, xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
-                    lastG = currentG;
-                }
-
-                if (lastB != currentB) {
-                    spegniDisplay();
-                    drawSpiderFalling(red, xRA, yRA);
-                    drawSpiderFalling(green, xGA, yGA);
-                    drawSpiderFalling(blu, xBA, yBA);
-                    handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
-                    lastB = currentB;
-                }
-            }while (pct < 1.0f);
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    showSpidersFalling();
-                }
-            }, 200);
-
-
-
+            }else{
+                spegniDisplay();
+                handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
+            }
 
         }catch(JSONException e){
             e.printStackTrace();
@@ -1941,6 +1989,24 @@ class RagnatelaHandler {
         }
     }
 
+    private void spegniLeds() throws JSONException{
+        try {
+            for (int i = 0; i < pixels_array_LED.length(); i++) {
+                if (isInNode(i)) {
+                    ((JSONObject) pixels_array_LED.get(i)).put("g", 0);
+                    ((JSONObject) pixels_array_LED.get(i)).put("b", 0);
+                    ((JSONObject) pixels_array_LED.get(i)).put("r", 0);
+                } else {
+                    ((JSONObject) pixels_array_LED.get(i)).put("r", 255);
+                    ((JSONObject) pixels_array_LED.get(i)).put("g", 255);
+                    ((JSONObject) pixels_array_LED.get(i)).put("b", 255);
+                }
+            }
+        } catch (JSONException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     int getRstopped(){
         return rstopped;
     }
@@ -1951,6 +2017,14 @@ class RagnatelaHandler {
 
     int getGstopped(){
         return gstopped;
+    }
+
+    private boolean getExit(){
+        return exitGame;
+    }
+
+    void setExit(boolean exit){
+        exitGame = exit;
     }
 
     private int computeIndex(int x, int y){
@@ -1989,27 +2063,77 @@ class RagnatelaHandler {
         }
     }
 
-//    private void showLeds() {
-//
-//        try {
-//
-//            for (int i = 0; i < pixels_array_LED.length(); i++) {
-//                ((JSONObject) pixels_array_LED.get(i)).put("r", (int) (Math.random() * 255.0f));
-//                ((JSONObject) pixels_array_LED.get(i)).put("g", (int) (Math.random() * 255.0f));
-//                ((JSONObject) pixels_array_LED.get(i)).put("b", (int) (Math.random() * 255.0f));
-//            }
-//            handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
-//
-//            /*handler.postDelayed(runnable = new Runnable() {
-//                @Override
-//                public void run() {
-//                    showLeds();
-//                }
-//            }, 200);*/
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    void showLedsWin() {
+
+        try {
+
+            if(!getExit()){
+                for (int i = 0; i < pixels_array_LED.length(); i++) {
+                    ((JSONObject) pixels_array_LED.get(i)).put("r", (int) (Math.random() * 255.0f));
+                    ((JSONObject) pixels_array_LED.get(i)).put("g", (int) (Math.random() * 255.0f));
+                    ((JSONObject) pixels_array_LED.get(i)).put("b", (int) (Math.random() * 255.0f));
+                }
+                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showLedsWin();
+                    }
+                }, 200);
+            } else{
+                spegniLeds();
+                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0 ,0);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void showLedsLoose() {
+
+        try {
+
+            if(!getExit()) {
+                for (int i = 0; i < pixels_array_LED.length(); i++) {
+                    ((JSONObject) pixels_array_LED.get(i)).put("r", 255);
+                    ((JSONObject) pixels_array_LED.get(i)).put("g", 50);
+                    ((JSONObject) pixels_array_LED.get(i)).put("b", 50);
+                }
+                handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
+
+                if (!getExit()) {
+                    Thread.sleep(1000);
+
+                    if (!getExit()) {
+                        for (int i = 0; i < pixels_array_LED.length(); i++) {
+                            ((JSONObject) pixels_array_LED.get(i)).put("r", 0);
+                            ((JSONObject) pixels_array_LED.get(i)).put("g", 0);
+                            ((JSONObject) pixels_array_LED.get(i)).put("b", 0);
+                        }
+                        handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
+
+                        if (!getExit()) {
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showLedsLoose();
+                                }
+                            }, 1000);
+                        }
+                    }
+                } else {
+                    spegniLeds();
+                    handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -2,7 +2,6 @@ package ragnatela.did.SpiderQuest;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -39,8 +38,6 @@ public class GameMenuActivity extends AppCompatActivity {
 
     //private GoogleApiClient client;
 
-    public static MediaPlayer mp;
-
     private RagnatelaHandler ragnatelaHandler;
 
     private Handler handler = new Handler();
@@ -67,13 +64,12 @@ public class GameMenuActivity extends AppCompatActivity {
 
         Thread t= new Thread(new Runnable() {
             public void run() {
-                ragnatelaHandler.init();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         ragnatelaHandler.showLogo();
                     }
-                }, 200);
+                }, 100);
             }
         });
         t.start();
@@ -81,22 +77,19 @@ public class GameMenuActivity extends AppCompatActivity {
         //inizializzo i Listeners
         initListeners();
 
-        playMusic();
+        ragnatelaHandler.playMusic(context);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        if(!mp.isPlaying()){
-            mp.start();
-            mp.setLooping(true);
-        }
+        ragnatelaHandler.resumeMusic();
     }
 
 //    @Override
 //    protected void onPause(){
 //        super.onPause();
-//        mp.pause();
+//        ragnatelaHandler.pauseMusic();
 //    }
 
     @Override
@@ -151,14 +144,6 @@ public class GameMenuActivity extends AppCompatActivity {
                 openInstructions();
             }
         });
-    }
-
-    private void playMusic() {
-        if(mp == null){
-            mp = MediaPlayer.create(getApplicationContext(), R.raw.menu);
-            mp.start();
-            mp.setLooping(true);
-        }
     }
 
     private void rememberClicked(PopupMenu popup) {

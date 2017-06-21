@@ -100,16 +100,13 @@ public class GameDragActivity extends AppCompatActivity implements View.OnDragLi
 
 //    protected void onResume(){
 //        super.onResume();
-//        if(!GameMenuActivity.mp.isPlaying()){
-//            GameMenuActivity.mp.start();
-//            GameMenuActivity.mp.setLooping(true);
-//        }
+//        ragnatelaHandler.resumeMusic();
 //    }
 //
 //    @Override
 //    protected void onPause(){
 //        super.onPause();
-//        GameMenuActivity.mp.pause();
+//        ragnatelaHandler.pauseMusic();
 //    }
 
     @Override

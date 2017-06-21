@@ -39,24 +39,34 @@ public class GameEndActivity extends AppCompatActivity {
             mp2 = MediaPlayer.create(getApplicationContext(), R.raw.fail_sound);
         }
 
-        GameMenuActivity.mp.stop();
-        GameMenuActivity.mp = null;
         mp2.start();
 
         Context context = GameEndActivity.this;
 
         ragnatelaHandler = new RagnatelaHandler(host_url, host_port, gameSpeed, context);
 
-        Thread t = new Thread(new Runnable() {
+        ragnatelaHandler.resetMediaPlayer();
+
+        Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
-                if (win) {
+                if (win)
                     ragnatelaHandler.showSpidersWin();
-                } else
+                else
                     ragnatelaHandler.showSpidersLoose();
             }
         });
-        t.start();
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (win)
+                    ragnatelaHandler.showLedsWin();
+                else
+                    ragnatelaHandler.showLedsLoose();
+            }
+        });
+        t1.start();
+        t2.start();
     }
 
     protected void onResume(){
@@ -86,6 +96,9 @@ public class GameEndActivity extends AppCompatActivity {
     }
 
     public void backtoMenu(View view){
+
+        ragnatelaHandler.setExit(true);
+
         Intent intent = new Intent(this, GameMenuActivity.class);
         intent.putExtra("hostUrl", host_url);
         intent.putExtra("hostPort", host_port);
