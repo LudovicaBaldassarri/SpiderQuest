@@ -1,5 +1,7 @@
 package ragnatela.did.SpiderQuest;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,16 +85,33 @@ public class GameMenuActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart(){
+        super.onStart();
+    }
+
+    @Override
     protected void onResume(){
         super.onResume();
         ragnatelaHandler.resumeMusic();
     }
 
-//    @Override
-//    protected void onPause(){
-//        super.onPause();
-//        ragnatelaHandler.pauseMusic();
-//    }
+    @Override
+    protected void onPause() {
+        Context context = getApplicationContext();
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+        if (!taskInfo.isEmpty()) {
+            ComponentName topActivity = taskInfo.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                ragnatelaHandler.pauseMusic();
+                //Toast.makeText(context, "YOU LEFT YOUR APP", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                //Toast.makeText(context, "YOU SWITCHED ACTIVITIES WITHIN YOUR APP", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onPause();
+    }
 
     @Override
     protected void onDestroy(){
@@ -197,6 +218,7 @@ public class GameMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GameInstructionsActivity.class);
         intent.putExtra("hostUrl", host_url);
         intent.putExtra("hostPort", host_port);
+        intent.putExtra("GameSpeed", gameSpeed);
         startActivity(intent);
     }
 
