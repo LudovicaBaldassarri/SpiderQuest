@@ -1660,7 +1660,7 @@ class RagnatelaHandler {
                 lastB=currentB;
             }
 
-            if(!getExit()){
+            if(!exitGame){
                 // Lancio tramite handler le due funzioni in modo che luppino ogni 200 millisecondi
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -1731,7 +1731,7 @@ class RagnatelaHandler {
                 lastB=currentB;
             }
 
-            if(!getExit()){
+            if(!exitGame){
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1875,9 +1875,9 @@ class RagnatelaHandler {
 //
 //                thisTime = System.currentTimeMillis() - waitTime;
 //
-//            }while(thisTime<200 && !getExit());
+//            }while(thisTime<200 && !exitGame);
 //
-//            if(!getExit()){
+//            if(!exitGame){
 //                handler.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -1915,13 +1915,15 @@ class RagnatelaHandler {
 
         try{
 
-            if(!getExit()) {
+            if(!exitGame) {
 
-                do {
+                pct = (System.currentTimeMillis() - startTime) / (movementDuration * 1000);
 
-                    pct = (System.currentTimeMillis() - startTime) / (movementDuration * 1000);  //tempo attuale - tempo di partenza minore della durata totale in millisecondi
+                while (!exitGame && (1.0f > pct)) {
 
-                    if(!getExit()) {
+                      //tempo attuale - tempo di partenza minore della durata totale in millisecondi
+
+                    if(!exitGame) {
 
                         //Log.d("PCT", "pct= "+ pct);
                         xRA = Math.round(beginXRA + pct * distXRA);
@@ -1961,9 +1963,10 @@ class RagnatelaHandler {
                             lastB = currentB;
                         }
                     }
-                } while (pct < 1.0f && !getExit());
+                    pct = (System.currentTimeMillis() - startTime) / (movementDuration * 1000);
+                }
 
-                if(!getExit()){
+                if(!exitGame){
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -2019,7 +2022,7 @@ class RagnatelaHandler {
         return gstopped;
     }
 
-    private boolean getExit(){
+    boolean getExit(){
         return exitGame;
     }
 
@@ -2067,7 +2070,7 @@ class RagnatelaHandler {
 
         try {
 
-            if(!getExit()){
+            if(!exitGame){
                 for (int i = 0; i < pixels_array_LED.length(); i++) {
                     ((JSONObject) pixels_array_LED.get(i)).put("r", (int) (Math.random() * 255.0f));
                     ((JSONObject) pixels_array_LED.get(i)).put("g", (int) (Math.random() * 255.0f));
@@ -2096,7 +2099,7 @@ class RagnatelaHandler {
 
         try {
 
-            if(!getExit()) {
+            if(!exitGame) {
                 for (int i = 0; i < pixels_array_LED.length(); i++) {
                     ((JSONObject) pixels_array_LED.get(i)).put("r", 255);
                     ((JSONObject) pixels_array_LED.get(i)).put("g", 50);
@@ -2104,10 +2107,10 @@ class RagnatelaHandler {
                 }
                 handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
 
-                if (!getExit()) {
+                if (!exitGame) {
                     Thread.sleep(1000);
 
-                    if (!getExit()) {
+                    if (!exitGame) {
                         for (int i = 0; i < pixels_array_LED.length(); i++) {
                             ((JSONObject) pixels_array_LED.get(i)).put("r", 0);
                             ((JSONObject) pixels_array_LED.get(i)).put("g", 0);
@@ -2115,7 +2118,7 @@ class RagnatelaHandler {
                         }
                         handleNetworkRequest(NetworkThread.SET_PIXELS, pixels_array_LED, 0, 0);
 
-                        if (!getExit()) {
+                        if (!exitGame) {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {

@@ -224,6 +224,7 @@ public class GameMenuActivity extends AppCompatActivity {
                     intent.putExtra("hostPort", host_port);
                     intent.putExtra("GameSpeed", gameSpeed);
                     startActivity(intent);
+                    startActivity(intent);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
