@@ -17,7 +17,7 @@ public class GameInstructionsActivity extends AppCompatActivity {
     int host_port;
     int gameSpeed;
     RagnatelaHandler ragnatelaHandler;
-    Handler handler;
+    Handler handler = new Handler();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

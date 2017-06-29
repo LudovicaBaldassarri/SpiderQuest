@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
     EditText hostPort;
 
     RagnatelaHandler ragnatelaHandler;
-    Handler handler;
+    Handler handler = new Handler();;
 
     private Handler mNetworkHandler;
     //private Handler mMainHandler;

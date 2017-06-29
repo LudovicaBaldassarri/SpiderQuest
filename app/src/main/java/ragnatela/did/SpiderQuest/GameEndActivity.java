@@ -18,7 +18,7 @@ public class GameEndActivity extends AppCompatActivity {
     MediaPlayer mp2;
 
     boolean win;
-    private Handler handler;
+    private Handler handler = new Handler();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
