@@ -234,19 +234,37 @@ public class GameDragActivity extends AppCompatActivity implements View.OnDragLi
 
     public void onClick(View view) {
         if(ragnoR==redPosition && ragnoB==bluePosition && ragnoG==greenPosition){
-            Intent intent = new Intent(GameDragActivity.this, GameEndActivity.class);
-            intent.putExtra("hostUrl", host_url);
-            intent.putExtra("hostPort", host_port);
-            intent.putExtra("GameSpeed", gameSpeed);
-            intent.putExtra("Victory", true);
-            startActivity(intent);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Intent intent = new Intent(GameDragActivity.this, GameEndActivity.class);
+                        intent.putExtra("hostUrl", host_url);
+                        intent.putExtra("hostPort", host_port);
+                        intent.putExtra("GameSpeed", gameSpeed);
+                        intent.putExtra("Victory", true);
+                        startActivity(intent);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }, 200);
         } else if (ragnoR!=15 && ragnoB!=15 && ragnoG!=15){
-            Intent intent = new Intent(this, GameEndActivity.class);
-            intent.putExtra("hostUrl", host_url);
-            intent.putExtra("hostPort", host_port);
-            intent.putExtra("GameSpeed", gameSpeed);
-            intent.putExtra("Victory", false);
-            startActivity(intent);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Intent intent = new Intent(GameDragActivity.this, GameEndActivity.class);
+                        intent.putExtra("hostUrl", host_url);
+                        intent.putExtra("hostPort", host_port);
+                        intent.putExtra("GameSpeed", gameSpeed);
+                        intent.putExtra("Victory", false);
+                        startActivity(intent);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }, 200);
         }else{
             Context context = getApplicationContext();
             CharSequence text = getString(R.string.finisci);

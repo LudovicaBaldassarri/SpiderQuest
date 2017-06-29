@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
     EditText hostPort;
 
     RagnatelaHandler ragnatelaHandler;
+    Handler handler;
 
     private Handler mNetworkHandler;
     //private Handler mMainHandler;
@@ -105,10 +106,19 @@ public class MainActivity extends Activity {
 
     @OnClick(R.id.start)
     void startApp(){
-        Intent intent = new Intent(this, GameMenuActivity.class);
-        intent.putExtra("hostUrl", host_url);
-        intent.putExtra("hostPort", host_port);
-        startActivity(intent);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Intent intent = new Intent(MainActivity.this, GameMenuActivity.class);
+                    intent.putExtra("hostUrl", host_url);
+                    intent.putExtra("hostPort", host_port);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, 200);
     }
 
     private boolean checkCorrectIp() {

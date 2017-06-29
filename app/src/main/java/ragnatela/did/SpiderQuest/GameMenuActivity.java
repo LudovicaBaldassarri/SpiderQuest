@@ -215,19 +215,37 @@ public class GameMenuActivity extends AppCompatActivity {
     }
 
     private void openInstructions() {
-        Intent intent = new Intent(this, GameInstructionsActivity.class);
-        intent.putExtra("hostUrl", host_url);
-        intent.putExtra("hostPort", host_port);
-        intent.putExtra("GameSpeed", gameSpeed);
-        startActivity(intent);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Intent intent = new Intent(GameMenuActivity.this, GameInstructionsActivity.class);
+                    intent.putExtra("hostUrl", host_url);
+                    intent.putExtra("hostPort", host_port);
+                    intent.putExtra("GameSpeed", gameSpeed);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, 200);
     }
 
     private void initGame() {
-        Intent intent = new Intent(GameMenuActivity.this, GamePlayingActivity.class);
-        intent.putExtra("hostUrl", host_url);
-        intent.putExtra("hostPort", host_port);
-        intent.putExtra("GameSpeed", gameSpeed);
-        startActivity(intent);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Intent intent = new Intent(GameMenuActivity.this, GamePlayingActivity.class);
+                    intent.putExtra("hostUrl", host_url);
+                    intent.putExtra("hostPort", host_port);
+                    intent.putExtra("GameSpeed", gameSpeed);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, 200);
     }
 
     //diable back button

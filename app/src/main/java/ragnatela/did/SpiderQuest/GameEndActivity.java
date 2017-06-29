@@ -99,10 +99,19 @@ public class GameEndActivity extends AppCompatActivity {
 
         ragnatelaHandler.setExit(true);
 
-        Intent intent = new Intent(this, GameMenuActivity.class);
-        intent.putExtra("hostUrl", host_url);
-        intent.putExtra("hostPort", host_port);
-        startActivity(intent);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Intent intent = new Intent(GameEndActivity.this, GameMenuActivity.class);
+                    intent.putExtra("hostUrl", host_url);
+                    intent.putExtra("hostPort", host_port);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, 1000);
     }
 
     //diable back button

@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -16,6 +17,7 @@ public class GameInstructionsActivity extends AppCompatActivity {
     int host_port;
     int gameSpeed;
     RagnatelaHandler ragnatelaHandler;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +80,20 @@ public class GameInstructionsActivity extends AppCompatActivity {
     }
 
     public void backToMenu(View view){
-        Intent intent = new Intent(this, GameMenuActivity.class);
-        intent.putExtra("hostUrl", host_url);
-        intent.putExtra("hostPort", host_port);
-        startActivity(intent);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Intent intent = new Intent(GameInstructionsActivity.this, GameMenuActivity.class);
+                    intent.putExtra("hostUrl", host_url);
+                    intent.putExtra("hostPort", host_port);
+                    startActivity(intent);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, 200);
     }
 
     //diable back button
