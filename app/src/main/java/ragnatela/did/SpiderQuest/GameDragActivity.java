@@ -243,7 +243,9 @@ public class GameDragActivity extends AppCompatActivity implements View.OnDragLi
                         intent.putExtra("hostPort", host_port);
                         intent.putExtra("GameSpeed", gameSpeed);
                         intent.putExtra("Victory", true);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        finish();
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -259,7 +261,9 @@ public class GameDragActivity extends AppCompatActivity implements View.OnDragLi
                         intent.putExtra("hostPort", host_port);
                         intent.putExtra("GameSpeed", gameSpeed);
                         intent.putExtra("Victory", false);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        finish();
                     }catch (Exception e){
                         e.printStackTrace();
                     }

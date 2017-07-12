@@ -87,8 +87,11 @@ public class GameInstructionsActivity extends AppCompatActivity {
                     Intent intent = new Intent(GameInstructionsActivity.this, GameMenuActivity.class);
                     intent.putExtra("hostUrl", host_url);
                     intent.putExtra("hostPort", host_port);
+                    //startActivity(intent);
+                    //startActivity(intent);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    startActivity(intent);
+                    finish();
                 }catch (Exception e){
                     e.printStackTrace();
                 }

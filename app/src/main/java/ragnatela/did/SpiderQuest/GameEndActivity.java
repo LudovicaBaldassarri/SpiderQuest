@@ -106,7 +106,9 @@ public class GameEndActivity extends AppCompatActivity {
                     Intent intent = new Intent(GameEndActivity.this, GameMenuActivity.class);
                     intent.putExtra("hostUrl", host_url);
                     intent.putExtra("hostPort", host_port);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    finish();
                 }catch (Exception e){
                     e.printStackTrace();
                 }

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
+import android.app.Activity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -938,7 +939,10 @@ class RagnatelaHandler {
                 Intent intent = new Intent(context, GameDragActivity.class);
                 intent.putExtra("hostUrl", host_url);
                 intent.putExtra("hostPort", host_port);
+                //context.startActivity(intent);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(intent);
+                ((Activity)context).finish();
             }
         },200);
     }

@@ -253,5 +253,10 @@ public class GameMenuActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+        ragnatelaHandler.resetMediaPlayer();
+        Intent intent=new Intent(GameMenuActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
