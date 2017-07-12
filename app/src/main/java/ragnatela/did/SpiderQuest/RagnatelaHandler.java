@@ -920,6 +920,8 @@ class RagnatelaHandler {
 
             showSpiders();
 
+
+
             spidersMoveInLed(rdest, gdest, bdest);
 
             System.out.print(rstopped);
@@ -1012,15 +1014,17 @@ class RagnatelaHandler {
                 currentG=computeIndex(xGA,yGA);
                 currentB=computeIndex(xBA,yBA);
 
-                if(lastR!=currentR){
+                if(lastR!=currentR || lastG!=currentG || lastB!=currentB){
                     spegniDisplay();
                     drawSpider(red, xRA, yRA);
                     drawSpider(green, xGA, yGA);
                     drawSpider(blu, xBA, yBA);
                     handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastR=currentR;
+                    lastG=currentG;
+                    lastB=currentB;
                 }
-
+                /*
                 if(lastG!=currentG){
                     spegniDisplay();
                     drawSpider(red, xRA, yRA);
@@ -1037,13 +1041,14 @@ class RagnatelaHandler {
                     drawSpider(blu, xBA, yBA);
                     handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastB=currentB;
-                }
+                }*/
 
                 thisTime=(System.currentTimeMillis()-waitTime);
 
             } while(thisTime<3000);
 
             moveSpiders();
+
 
 
         }catch(JSONException e){
@@ -1053,6 +1058,8 @@ class RagnatelaHandler {
     }
 
     private void moveSpiders(){
+        //int distMax=132;
+
         try{
 
             startTime=System.currentTimeMillis();
@@ -1063,6 +1070,10 @@ class RagnatelaHandler {
             int currentR;
             int currentG;
             int currentB;
+            //int endR=computeIndex(endXRA,endYRA);
+            //int endG=computeIndex(endXGA,endYGA);
+            //int endB=computeIndex(endXBA,endYBA);
+
 
             do{
                 pct=(System.currentTimeMillis()-startTime)/(movementDuration*gameSpeed*10);  //tempo attuale - tempo di partenza minore della durata totale in millisecondi
@@ -1077,15 +1088,20 @@ class RagnatelaHandler {
                 currentG=computeIndex(xGA,yGA);
                 currentB=computeIndex(xBA,yBA);
 
-                if(lastR!=currentR){
+                if(lastR!=currentR || lastG!=currentG || lastB!=currentB){
                     spegniDisplay();
                     drawSpider(red, xRA, yRA);
                     drawSpider(green, xGA, yGA);
                     drawSpider(blu, xBA, yBA);
                     handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastR=currentR;
+                    lastG=currentG;
+                    lastB=currentB;
+                    //distMax--;
                 }
 
+
+                /*
                 if(lastG!=currentG){
                     spegniDisplay();
                     drawSpider(red, xRA, yRA);
@@ -1102,10 +1118,11 @@ class RagnatelaHandler {
                     drawSpider(blu, xBA, yBA);
                     handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
                     lastB=currentB;
-                }
+                }*/
 
 
             } while(pct<1.0f);
+            //distMax!=0 && ((currentR!=endR) && (currentG!=endG) && (currentB!=endB))
 
 
 
@@ -1633,22 +1650,22 @@ class RagnatelaHandler {
             currentG=computeIndex(xGA,yGA);
             currentB=computeIndex(xBA,yBA);
 
-            if(lastR!=currentR){
+            //if(lastR!=currentR){
                 spegniDisplay();
                 drawSpiderDown(red, xRA, yRA);
                 drawSpiderDown(green, xGA, yGA);
                 drawSpiderDown(blu, xBA, yBA);
                 handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
-                lastR=currentR;
-            }
 
+           // }
+            /*
             if(lastG!=currentG){
                 spegniDisplay();
                 drawSpiderDown(red, xRA, yRA);
                 drawSpiderDown(green, xGA, yGA);
                 drawSpiderDown(blu, xBA, yBA);
                 handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
-                lastG=currentG;
+
             }
 
             if(lastB!=currentB){
@@ -1657,8 +1674,8 @@ class RagnatelaHandler {
                 drawSpiderDown(green, xGA, yGA);
                 drawSpiderDown(blu, xBA, yBA);
                 handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
-                lastB=currentB;
-            }
+
+            }*/
 
             if(!exitGame){
                 // Lancio tramite handler le due funzioni in modo che luppino ogni 200 millisecondi
@@ -1704,14 +1721,14 @@ class RagnatelaHandler {
             currentG=computeIndex(xGA,yGA);
             currentB=computeIndex(xBA,yBA);
 
-            if(lastR!=currentR){
+           // if(lastR!=currentR){
                 spegniDisplay();
                 drawSpiderUp(red, xRA, yRA-2);
                 drawSpiderUp(green, xGA, yGA-2);
                 drawSpiderUp(blu, xBA, yBA-2);
                 handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
-                lastR=currentR;
-            }
+
+            /*}
 
             if(lastG!=currentG){
                 spegniDisplay();
@@ -1719,7 +1736,7 @@ class RagnatelaHandler {
                 drawSpiderUp(green, xGA, yGA-2);
                 drawSpiderUp(blu, xBA, yBA-2);
                 handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
-                lastG=currentG;
+
             }
 
             if(lastB!=currentB){
@@ -1728,8 +1745,8 @@ class RagnatelaHandler {
                 drawSpiderUp(green, xGA, yGA-2);
                 drawSpiderUp(blu, xBA, yBA-2);
                 handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
-                lastB=currentB;
-            }
+
+            }*/
 
             if(!exitGame){
                 handler.postDelayed(new Runnable() {
@@ -1936,15 +1953,17 @@ class RagnatelaHandler {
                         currentG = computeIndex(xGA, yGA);
                         currentB = computeIndex(xBA, yBA);
 
-                        if (lastR != currentR) {
+                        if (lastR != currentR || lastG != currentG || lastB != currentB) {
                             spegniDisplay();
                             drawSpiderFalling(red, xRA, yRA);
                             drawSpiderFalling(green, xGA, yGA);
                             drawSpiderFalling(blu, xBA, yBA);
                             handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
                             lastR = currentR;
+                            lastG = currentG;
+                            lastB = currentB;
                         }
-
+/*
                         if (lastG != currentG) {
                             spegniDisplay();
                             drawSpiderFalling(red, xRA, yRA);
@@ -1961,19 +1980,11 @@ class RagnatelaHandler {
                             drawSpiderFalling(blu, xBA, yBA);
                             handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
                             lastB = currentB;
-                        }
+                        }*/
                     }
                     pct = (System.currentTimeMillis() - startTime) / (movementDuration * 1000);
                 }
 
-                if(!exitGame){
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            moveSpidersFalling();
-                        }
-                    }, 200);
-                }
             }else{
                 spegniDisplay();
                 handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0 ,0);
