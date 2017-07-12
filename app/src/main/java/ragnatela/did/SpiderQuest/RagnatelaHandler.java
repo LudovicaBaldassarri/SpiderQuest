@@ -643,6 +643,7 @@ class RagnatelaHandler {
 
     void showArrow(){
         try{
+            spegniDisplay();
             drawArrow(centerLogoX, getCenterLogoY);
             handleNetworkRequest(NetworkThread.SET_DISPLAY_PIXELS, pixels_array_DISPLAY, 0, 0);
         }catch(JSONException e){
@@ -2011,13 +2012,13 @@ class RagnatelaHandler {
         try {
             for (int i = 0; i < pixels_array_LED.length(); i++) {
                 if (isInNode(i)) {
-                    ((JSONObject) pixels_array_LED.get(i)).put("g", 0);
-                    ((JSONObject) pixels_array_LED.get(i)).put("b", 0);
-                    ((JSONObject) pixels_array_LED.get(i)).put("r", 0);
-                } else {
-                    ((JSONObject) pixels_array_LED.get(i)).put("r", 255);
                     ((JSONObject) pixels_array_LED.get(i)).put("g", 255);
                     ((JSONObject) pixels_array_LED.get(i)).put("b", 255);
+                    ((JSONObject) pixels_array_LED.get(i)).put("r", 255);
+                } else {
+                    ((JSONObject) pixels_array_LED.get(i)).put("r", 0);
+                    ((JSONObject) pixels_array_LED.get(i)).put("g", 0);
+                    ((JSONObject) pixels_array_LED.get(i)).put("b", 0);
                 }
             }
         } catch (JSONException exception) {
